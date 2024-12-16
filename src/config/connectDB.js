@@ -5,7 +5,7 @@ const { Sequelize } = require('sequelize');
 //const sequelize = new Sequelize('postgres://user:pass@example.com:5432/dbname') // Example for postgres
 
 // Option 3: Passing parameters separately (other dialects)
-const sequelize = new Sequelize('libma', 'root', null, {
+const sequelize = new Sequelize('libma', 'admin', process.env.MYSQL_PASSWORD || "J3E_thAKVHaaG)l]", {
     host: 'localhost',
     dialect:  'mysql'
 });

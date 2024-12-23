@@ -12,6 +12,7 @@ let v1Router = (app) => {
 
     router.post('/libma/create', apiController.handleRegister
     );
+    router.post('/libma/login', apiController.handleLogin)
 
 
     return app.use("/", router);

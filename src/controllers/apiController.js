@@ -22,10 +22,28 @@ const handleRegister = async (req, res, next) => {
             code: response.code,
         })
     } catch (err) {
-        return res.status(400).json({message: err, data: 'test api'})
+        return res.status(400).json({message: err.message, data: err.data})
     }
 }
+const handleLogin = async (req, res, next) => {
+    try {
+        if (!req.body.email || !req.body.password) {
+            return res.status(400).json({
+                message: 'Missing required fields'
+            })
+        }
 
+        let response = await userService.loginUser(req.body)
+        return res.status(200).json({
+            message: response.msg,
+            code: response.code,
+        })
+
+    } catch (err) {
+        return res.status(400).json({message: err.message, data: err.data})
+    }
+}
 module.exports = {
     handleRegister,
+    handleLogin,
 }

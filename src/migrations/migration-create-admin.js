@@ -23,19 +23,14 @@ module.exports = {
                 type: Sequelize.STRING,
                 allowNull: false
             },
-            email: {
-                type: Sequelize.STRING,
-                unique: true,
-                allowNull: false
-            },
             phone_number: {
                 type: Sequelize.STRING
             },
-            created_at: {
+            createdAt: {
                 allowNull: false,
                 type: Sequelize.DATE
             },
-            updated_at: {
+            updatedAt: {
                 allowNull: false,
                 type: Sequelize.DATE
             }

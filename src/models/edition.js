@@ -43,11 +43,11 @@ module.exports = (sequelize) => {
             type: DataTypes.STRING,
             unique: true,
         },
-        created_at: {
+        createdAt: {
             type: DataTypes.DATE,
             allowNull: false,
         },
-        updated_at: {
+        updatedAt: {
             type: DataTypes.DATE,
             allowNull: false,
         },
@@ -55,7 +55,6 @@ module.exports = (sequelize) => {
         sequelize,
         modelName: 'Edition',
         tableName: 'Editions',
-        timestamps: false,
     });
     return Edition;
 };

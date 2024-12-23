@@ -31,25 +31,17 @@ module.exports = (sequelize) => {
             type: DataTypes.STRING,
             allowNull: false,
         },
-        email: {
-            type: DataTypes.STRING,
-            unique: true,
-            allowNull: false,
-        },
-        rating: {
-            type: DataTypes.INTEGER,
-        },
         full_name: {
             type: DataTypes.STRING,
         },
         address: {
             type: DataTypes.STRING,
         },
-        created_at: {
+        createdAt: {
             type: DataTypes.DATE,
             allowNull: false,
         },
-        updated_at: {
+        updatedAt: {
             type: DataTypes.DATE,
             allowNull: false,
         },
@@ -57,7 +49,6 @@ module.exports = (sequelize) => {
         sequelize,
         modelName: 'Member',
         tableName: 'Members',
-        timestamps: false,
     });
     return Member;
 };

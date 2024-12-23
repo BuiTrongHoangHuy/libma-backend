@@ -50,11 +50,11 @@ module.exports = (sequelize) => {
         fine: {
             type: DataTypes.DECIMAL(10, 2),
         },
-        created_at: {
+        createdAt: {
             type: DataTypes.DATE,
             allowNull: false,
         },
-        updated_at: {
+        updatedAt: {
             type: DataTypes.DATE,
             allowNull: false,
         },
@@ -62,7 +62,6 @@ module.exports = (sequelize) => {
         sequelize,
         modelName: 'LoanRecord',
         tableName: 'LoanRecords',
-        timestamps: false,
     });
     return LoanRecord;
 };

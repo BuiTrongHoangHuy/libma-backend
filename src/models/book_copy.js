@@ -36,11 +36,11 @@ module.exports = (sequelize) => {
         status: {
             type: DataTypes.ENUM('Available', 'Borrowed'),
         },
-        created_at: {
+        createdAt: {
             type: DataTypes.DATE,
             allowNull: false,
         },
-        updated_at: {
+        updatedAt: {
             type: DataTypes.DATE,
             allowNull: false,
         },
@@ -48,7 +48,6 @@ module.exports = (sequelize) => {
         sequelize,
         modelName: 'BookCopy',
         tableName: 'BookCopies',
-        timestamps: false,
     });
     return BookCopy;
 };

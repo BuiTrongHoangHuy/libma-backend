@@ -32,11 +32,11 @@ module.exports = (sequelize) => {
         summary: {
             type: DataTypes.TEXT,
         },
-        created_at: {
+        createdAt: {
             type: DataTypes.DATE,
             allowNull: false,
         },
-        updated_at: {
+        updatedAt: {
             type: DataTypes.DATE,
             allowNull: false,
         },
@@ -44,7 +44,6 @@ module.exports = (sequelize) => {
         sequelize,
         modelName: 'Title',
         tableName: 'Titles',
-        timestamps: false,
     });
     return Title;
 };

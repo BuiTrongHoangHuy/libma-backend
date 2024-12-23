@@ -30,11 +30,11 @@ module.exports = (sequelize) => {
             type: DataTypes.STRING,
             allowNull: false,
         },
-        created_at: {
+        createdAt: {
             type: DataTypes.DATE,
             allowNull: false,
         },
-        updated_at: {
+        updatedAt: {
             type: DataTypes.DATE,
             allowNull: false,
         },
@@ -42,7 +42,6 @@ module.exports = (sequelize) => {
         sequelize,
         modelName: 'Notification',
         tableName: 'Notifications',
-        timestamps: false,
     });
     return Notification;
 };

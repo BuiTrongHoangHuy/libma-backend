@@ -26,19 +26,14 @@ module.exports = (sequelize) => {
             type: DataTypes.STRING,
             allowNull: false,
         },
-        email: {
-            type: DataTypes.STRING,
-            unique: true,
-            allowNull: false,
-        },
         phone_number: {
             type: DataTypes.STRING,
         },
-        created_at: {
+        createdAt: {
             type: DataTypes.DATE,
             allowNull: false,
         },
-        updated_at: {
+        updatedAt: {
             type: DataTypes.DATE,
             allowNull: false,
         },
@@ -46,7 +41,6 @@ module.exports = (sequelize) => {
         sequelize,
         modelName: 'Admin',
         tableName: 'Admins',
-        timestamps: false,
     });
     return Admin;
 };

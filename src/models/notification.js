@@ -4,9 +4,9 @@ module.exports = (sequelize) => {
     class Notification extends Model {
         static associate(models) {
             // A notification belongs to a member
-            Notification.belongsTo(models.Member, {
-                foreignKey: 'member_id',
-                as: 'member',
+            Notification.belongsTo(models.User, {
+                foreignKey: 'user_id',
+                as: 'user',
             });
         }
     }
@@ -18,7 +18,7 @@ module.exports = (sequelize) => {
             allowNull: false,
             autoIncrement: true,
         },
-        member_id: {
+        user_id: {
             type: DataTypes.BIGINT,
             allowNull: false,
         },

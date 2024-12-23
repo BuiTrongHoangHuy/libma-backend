@@ -30,12 +30,12 @@ module.exports = {
 
         // Adding foreign key to LoanRecords
         await queryInterface.addConstraint('LoanRecords', {
-            fields: ['member_id'],
+            fields: ['user_id'],
             type: 'foreign key',
             name: 'FK_member_id',
             references: {
-                table: 'Members',
-                field: 'member_id'
+                table: 'Users',
+                field: 'user_id'
             },
             onDelete: 'CASCADE',
             onUpdate: 'CASCADE'
@@ -68,55 +68,18 @@ module.exports = {
 
         // Adding foreign key to Notifications
         await queryInterface.addConstraint('Notifications', {
-            fields: ['member_id'],
+            fields: ['user_id'],
             type: 'foreign key',
-            name: 'FK_member_notification',
+            name: 'FK_user_notification',
             references: {
-                table: 'Members',
-                field: 'member_id'
+                table: 'Users',
+                field: 'user_id'
             },
             onDelete: 'CASCADE',
             onUpdate: 'CASCADE'
         });
 
-        // Adding foreign key to Members
-        await queryInterface.addConstraint('Members', {
-            fields: ['account_id'],
-            type: 'foreign key',
-            name: 'FK_account_member',
-            references: {
-                table: 'Accounts',
-                field: 'account_id'
-            },
-            onDelete: 'CASCADE',
-            onUpdate: 'CASCADE'
-        });
 
-        // Adding foreign key to Admins
-        await queryInterface.addConstraint('Admins', {
-            fields: ['account_id'],
-            type: 'foreign key',
-            name: 'FK_account_admin',
-            references: {
-                table: 'Accounts',
-                field: 'account_id'
-            },
-            onDelete: 'CASCADE',
-            onUpdate: 'CASCADE'
-        });
-
-        // Adding foreign key to Librarians
-        await queryInterface.addConstraint('Librarians', {
-            fields: ['account_id'],
-            type: 'foreign key',
-            name: 'FK_account_librarian',
-            references: {
-                table: 'Accounts',
-                field: 'account_id'
-            },
-            onDelete: 'CASCADE',
-            onUpdate: 'CASCADE'
-        });
     },
 
     async down(queryInterface, Sequelize) {

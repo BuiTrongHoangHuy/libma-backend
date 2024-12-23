@@ -10,7 +10,7 @@ const testApi = (req, res, next) => {
 
 const handleRegister = async (req, res, next) => {
     try {
-        if (!req.body.email || !req.body.password) {
+        if (!req.body.email || !req.body.password || !req.body.full_name) {
             return res.status(400).json({
                 message: 'Missing required fields'
             })

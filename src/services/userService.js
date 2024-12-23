@@ -4,7 +4,7 @@ import bluebird from 'bluebird'
 import db from '../models/index'
 
 const checkEmailExist = async (email) => {
-    let user = await db.Account.findOne({where: {email: email}})
+    let user = await db.User.findOne({where: {email: email}})
     console.log(user)
     if (user) {
         return true;
@@ -25,11 +25,13 @@ const createUser = async (rawUserData) => {
         const salt = bcrypt.genSaltSync(10)
 
         let hassPassword = await bcrypt.hash(rawUserData.password, salt)
-        await db.Account.create({
+        await db.User.create({
             email: rawUserData.email,
             password: hassPassword,
             salt: salt,
             username: rawUserData.email,
+            full_name: rawUserData.full_name,
+            role: "Admin",
         })
         return {
             msg: 'Successfully created user',

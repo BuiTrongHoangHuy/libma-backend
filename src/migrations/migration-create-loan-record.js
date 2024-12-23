@@ -9,25 +9,14 @@ module.exports = {
                 primaryKey: true,
                 type: Sequelize.BIGINT
             },
-            member_id: {
+            user_id: {
                 type: Sequelize.BIGINT,
                 allowNull: false,
-                /*references: {
-                    model: 'Members',
-                    key: 'member_id'
-                },
-                onUpdate: 'CASCADE',
-                onDelete: 'CASCADE'*/
+
             },
             copy_id: {
                 type: Sequelize.BIGINT,
                 allowNull: false,
-                /*references: {
-                    model: 'BookCopies',
-                    key: 'copy_id'
-                },
-                onUpdate: 'CASCADE',
-                onDelete: 'CASCADE'*/
             },
             loan_date: {
                 allowNull: false,

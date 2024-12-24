@@ -1,12 +1,4 @@
 import userService from "../services/userService";
-import {use} from "express/lib/application";
-
-const testApi = (req, res, next) => {
-    return res.status(200).json({
-        message: 'oke',
-        data: 'test api'
-    })
-}
 
 const handleRegister = async (req, res, next) => {
     try {
@@ -37,6 +29,7 @@ const handleLogin = async (req, res, next) => {
         return res.status(200).json({
             message: response.msg,
             code: response.code,
+            data: response.data ? response.data : {},
         })
 
     } catch (err) {

@@ -1,8 +1,10 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import apiController from "../controllers/apiController";
+import {checkUserJWT} from "../middleware/JWTActions";
 
 let router = express.Router();
+
 
 let v1Router = (app) => {
 
@@ -10,12 +12,12 @@ let v1Router = (app) => {
         return res.send('hello  12');
     });
 
-    router.post('/libma/create', apiController.handleRegister
+    router.post('/register', apiController.handleRegister
     );
-    router.post('/libma/login', apiController.handleLogin)
+    router.post('/login', apiController.handleLogin)
 
 
-    return app.use("/", router);
+    return app.use("/api/v1", router);
 }
 
 module.exports = v1Router;

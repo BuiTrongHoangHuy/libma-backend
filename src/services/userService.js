@@ -2,7 +2,9 @@ import bcrypt from 'bcryptjs'
 import mysql from 'mysql2/promise'
 import bluebird from 'bluebird'
 import db from '../models/index'
+import {createJWT} from "../middleware/JWTActions"
 
+require('dotenv').config()
 const checkEmailExist = async (email) => {
     let user = await db.User.findOne({where: {email: email}})
     console.log(user)
@@ -55,9 +57,19 @@ const loginUser = async (rawUserData) => {
             const userPassword = await bcrypt.hash(rawUserData.password, user.salt)
             const isPasswordValid = userPassword === user.password
             if (isPasswordValid) {
+                let payload = {
+                    id: user.user_id,
+                    email: user.email,
+                    role: user.role,
+                    expiresIn: process.env.JWT_EXPIRES_IN,
+                }
+                let token = createJWT(payload)
                 return {
                     msg: 'Login successful',
                     code: 200,
+                    data: {
+                        access_token: token,
+                    },
                 }
             } else {
                 return {

@@ -91,7 +91,38 @@ const loginUser = async (rawUserData) => {
         }
     }
 }
+
+const listUser = async () => {
+    try {
+        const users = await db.User.findAll({
+            attributes: ['username',
+                ['full_name', 'fullName'],
+                ['phone_number', 'phoneNumber'],
+                'email',
+                'address',
+                'role',
+                'status',
+                'createdAt'
+            ]
+        });
+        console.log(users.every(user => user instanceof db.User)); // true
+
+        return {
+            msg: 'Get list user successful',
+            code: 200,
+            data: users
+        }
+    } catch (error) {
+        return {
+            msg: error.message,
+            code: error.code,
+            error: error,
+        }
+    }
+}
+
 module.exports = {
     createUser,
     loginUser,
+    listUser
 }

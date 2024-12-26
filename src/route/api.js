@@ -1,6 +1,7 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import apiController from "../controllers/apiController";
+import userController from "../controllers/userController";
 import {checkUserJWT} from "../middleware/JWTActions";
 
 let router = express.Router();
@@ -15,6 +16,7 @@ let v1Router = (app) => {
     router.post('/register', apiController.handleRegister
     );
     router.post('/login', apiController.handleLogin)
+    router.get('/list', userController.listUser)
 
 
     return app.use("/api/v1", router);

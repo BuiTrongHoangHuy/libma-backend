@@ -54,6 +54,9 @@ module.exports = (sequelize) => {
             type: DataTypes.ENUM('Admin', 'Librarian', 'Reader', 'Staff'),
             allowNull: false,
         },
+        status: {
+            type: DataTypes.INTEGER,
+        },
         createdAt: {
             type: DataTypes.DATE,
             allowNull: false,

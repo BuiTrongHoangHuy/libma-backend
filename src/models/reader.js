@@ -1,16 +1,26 @@
 'use strict';
 const {Model, DataTypes} = require('sequelize');
 module.exports = (sequelize) => {
-    class User extends Model {
+    class Reader extends Model {
         static associate(models) {
-            User.belongsTo(models.Account, {
+            // define association here
+            Reader.hasMany(models.LoanRecord, {
+                foreignKey: 'reader_id',
+                as: 'loanRecords',
+            });
+            Reader.hasMany(models.Notification, {
+                foreignKey: 'reader_id',
+                as: 'notifications',
+            });
+            Reader.belongsTo(models.Account, {
                 foreignKey: 'account_id',
+                as: 'account',
             })
         }
     }
 
-    User.init({
-        user_id: {
+    Reader.init({
+        reader_id: {
             type: DataTypes.BIGINT,
             primaryKey: true,
             allowNull: false,
@@ -20,7 +30,7 @@ module.exports = (sequelize) => {
             type: DataTypes.BIGINT,
             allowNull: false
         },
-        full_name: {
+        phone_number: {
             type: DataTypes.STRING,
             allowNull: false
         },
@@ -29,28 +39,30 @@ module.exports = (sequelize) => {
             unique: true,
             allowNull: false
         },
-        phone_number: {
+        full_name: {
             type: DataTypes.STRING
         },
-        role: {
-            type: DataTypes.ENUM('Admin', 'Staff', 'Librarian'),
-            allowNull: false
+        address: {
+            type: DataTypes.STRING
+        },
+        type: {
+            type: DataTypes.ENUM('Student', 'Guest', 'Teacher')
         },
         status: {
             type: DataTypes.INTEGER
         },
         createdAt: {
             type: DataTypes.DATE,
-            allowNull: false
+            allowNull: false,
         },
         updatedAt: {
             type: DataTypes.DATE,
-            allowNull: false
-        }
+            allowNull: false,
+        },
     }, {
         sequelize,
-        modelName: 'User',
-        tableName: 'Users',
+        modelName: 'Reader',
+        tableName: 'Readers',
     });
-    return User;
+    return Reader;
 };

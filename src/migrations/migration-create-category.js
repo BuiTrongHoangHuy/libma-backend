@@ -3,29 +3,20 @@ const {DataTypes} = require("sequelize");
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
     async up(queryInterface, Sequelize) {
-        await queryInterface.createTable('Notifications', {
-            notification_id: {
+        await queryInterface.createTable('Categories', {
+            category_id: {
                 type: Sequelize.BIGINT,
                 primaryKey: true,
                 allowNull: false,
-                autoIncrement: true,
+                autoIncrement: true
             },
-            reader_id: {
-                type: Sequelize.BIGINT,
-                allowNull: false,
-            },
-            type: {
-                type: Sequelize.ENUM('Reminder', 'Available'),
-                allowNull: false,
-            },
-            content: {
+            category_name: {
                 type: Sequelize.STRING,
-                allowNull: false,
+                allowNull: false
             },
             status: {
                 type: Sequelize.INTEGER,
                 defaultValue: 1,
-
             },
             createdAt: {
                 type: Sequelize.DATE,
@@ -38,6 +29,6 @@ module.exports = {
         });
     },
     async down(queryInterface, Sequelize) {
-        await queryInterface.dropTable('Notifications');
+        await queryInterface.dropTable('Categories');
     }
 };

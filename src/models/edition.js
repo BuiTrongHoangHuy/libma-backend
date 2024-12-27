@@ -39,9 +39,15 @@ module.exports = (sequelize) => {
         pages: {
             type: DataTypes.INTEGER,
         },
+        thumbnail_url: {
+            type: DataTypes.STRING()
+        },
         isbn: {
             type: DataTypes.STRING,
             unique: true,
+        },
+        status: {
+            type: DataTypes.INTEGER
         },
         createdAt: {
             type: DataTypes.DATE,

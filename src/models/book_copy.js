@@ -33,8 +33,11 @@ module.exports = (sequelize) => {
         location: {
             type: DataTypes.STRING,
         },
-        status: {
+        book_status: {
             type: DataTypes.ENUM('Available', 'Borrowed'),
+        },
+        status: {
+            type: DataTypes.INTEGER,
         },
         createdAt: {
             type: DataTypes.DATE,

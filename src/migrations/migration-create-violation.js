@@ -1,46 +1,46 @@
 'use strict';
+const {DataTypes} = require("sequelize");
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
     async up(queryInterface, Sequelize) {
         await queryInterface.createTable('Violations', {
             violation_id: {
+                type: DataTypes.BIGINT,
+                primaryKey: true,
                 allowNull: false,
                 autoIncrement: true,
-                primaryKey: true,
-                type: Sequelize.BIGINT
             },
             transaction_id: {
-                type: Sequelize.BIGINT,
+                type: DataTypes.BIGINT,
                 allowNull: false,
-                /*references: {
-                    model: 'LoanRecords',
-                    key: 'transaction_id'
-                },
-                onUpdate: 'CASCADE',
-                onDelete: 'CASCADE'*/
             },
             violation_type: {
-                type: Sequelize.ENUM('Late_Return', 'Lost_Book', 'Damaged_Book'),
-                allowNull: false
+                type: DataTypes.ENUM('Late_Return', 'Lost_Book', 'Damaged_Book'),
+                allowNull: false,
             },
             description: {
-                type: Sequelize.TEXT
+                type: DataTypes.TEXT,
             },
             fine_amount: {
-                type: Sequelize.DECIMAL(10, 2)
+                type: DataTypes.DECIMAL(10, 2),
             },
             resolved: {
-                type: Sequelize.BOOLEAN,
-                defaultValue: false
+                type: DataTypes.INTEGER,
+                defaultValue: false,
+            },
+            status: {
+                type: Sequelize.INTEGER,
+                defaultValue: 1,
+
             },
             createdAt: {
+                type: DataTypes.DATE,
                 allowNull: false,
-                type: Sequelize.DATE
             },
             updatedAt: {
+                type: DataTypes.DATE,
                 allowNull: false,
-                type: Sequelize.DATE
-            }
+            },
         });
     },
     async down(queryInterface, Sequelize) {

@@ -3,34 +3,34 @@ const {DataTypes} = require("sequelize");
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
     async up(queryInterface, Sequelize) {
-        await queryInterface.createTable('LoanRecords', {
-            transaction_id: {
-                type: Sequelize.BIGINT,
+        await queryInterface.createTable('Readers', {
+            reader_id: {
+                type: DataTypes.BIGINT,
                 primaryKey: true,
                 allowNull: false,
                 autoIncrement: true,
             },
-            reader_id: {
-                type: Sequelize.BIGINT,
-                allowNull: false,
+            account_id: {
+                type: DataTypes.BIGINT,
+                allowNull: false
             },
-            copy_id: {
-                type: Sequelize.BIGINT,
-                allowNull: false,
+            phone_number: {
+                type: DataTypes.STRING,
+                allowNull: false
             },
-            loan_date: {
-                type: Sequelize.DATE,
-                allowNull: false,
+            email: {
+                type: DataTypes.STRING,
+                unique: true,
+                allowNull: false
             },
-            due_date: {
-                type: Sequelize.DATE,
-                allowNull: false,
+            full_name: {
+                type: DataTypes.STRING
             },
-            return_date: {
-                type: Sequelize.DATE,
+            address: {
+                type: DataTypes.STRING
             },
-            fine: {
-                type: Sequelize.DECIMAL(10, 2),
+            type: {
+                type: DataTypes.ENUM('Student', 'Guest', 'Teacher')
             },
             status: {
                 type: Sequelize.INTEGER,
@@ -48,6 +48,6 @@ module.exports = {
         });
     },
     async down(queryInterface, Sequelize) {
-        await queryInterface.dropTable('LoanRecords');
+        await queryInterface.dropTable('Readers');
     }
 };

@@ -1,48 +1,50 @@
 'use strict';
+const {DataTypes} = require("sequelize");
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
     async up(queryInterface, Sequelize) {
         await queryInterface.createTable('Editions', {
             edition_id: {
+                type: Sequelize.BIGINT,
+                primaryKey: true,
                 allowNull: false,
                 autoIncrement: true,
-                primaryKey: true,
-                type: Sequelize.BIGINT
             },
             title_id: {
                 type: Sequelize.BIGINT,
                 allowNull: false,
-                /*references: {
-                    model: 'Titles',
-                    key: 'title_id'
-                },
-                onUpdate: 'CASCADE',
-                onDelete: 'CASCADE'*/
             },
             edition_number: {
-                type: Sequelize.INTEGER
+                type: Sequelize.INTEGER,
             },
             publication_year: {
-                type: Sequelize.INTEGER
+                type: Sequelize.INTEGER,
             },
             publisher: {
-                type: Sequelize.STRING
+                type: Sequelize.STRING,
             },
             pages: {
-                type: Sequelize.INTEGER
+                type: Sequelize.INTEGER,
+            },
+            thumbnail_url: {
+                type: Sequelize.STRING()
             },
             isbn: {
                 type: Sequelize.STRING,
-                unique: true
+                unique: true,
+            },
+            status: {
+                type: Sequelize.INTEGER,
+                defaultValue: 1,
             },
             createdAt: {
+                type: Sequelize.DATE,
                 allowNull: false,
-                type: Sequelize.DATE
             },
             updatedAt: {
+                type: Sequelize.DATE,
                 allowNull: false,
-                type: Sequelize.DATE
-            }
+            },
         });
     },
     async down(queryInterface, Sequelize) {

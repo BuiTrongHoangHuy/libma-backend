@@ -33,8 +33,11 @@ module.exports = (sequelize) => {
             type: DataTypes.DECIMAL(10, 2),
         },
         resolved: {
-            type: DataTypes.BOOLEAN,
+            type: DataTypes.INTEGER,
             defaultValue: false,
+        },
+        status: {
+            type: DataTypes.INTEGER
         },
         createdAt: {
             type: DataTypes.DATE,

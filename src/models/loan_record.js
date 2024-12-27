@@ -4,9 +4,9 @@ module.exports = (sequelize) => {
     class LoanRecord extends Model {
         static associate(models) {
             // A loan record belongs to a member
-            LoanRecord.belongsTo(models.User, {
-                foreignKey: 'user_id',
-                as: 'user',
+            LoanRecord.belongsTo(models.Reader, {
+                foreignKey: 'reader_id',
+                as: 'reader',
             });
             // A loan record belongs to a book copy
             LoanRecord.belongsTo(models.BookCopy, {
@@ -28,7 +28,7 @@ module.exports = (sequelize) => {
             allowNull: false,
             autoIncrement: true,
         },
-        user_id: {
+        member_id: {
             type: DataTypes.BIGINT,
             allowNull: false,
         },
@@ -49,6 +49,9 @@ module.exports = (sequelize) => {
         },
         fine: {
             type: DataTypes.DECIMAL(10, 2),
+        },
+        status: {
+            type: DataTypes.INTEGER,
         },
         createdAt: {
             type: DataTypes.DATE,

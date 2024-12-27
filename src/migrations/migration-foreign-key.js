@@ -2,95 +2,125 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
     async up(queryInterface, Sequelize) {
-        // Adding foreign key to Editions
+        await queryInterface.addConstraint('Titles', {
+            fields: ['category_id'],
+            type: 'foreign key',
+            name: 'fk_titles_category', // optional
+            references: {
+                table: 'Categories',
+                field: 'category_id',
+            },
+            onDelete: 'cascade',
+            onUpdate: 'cascade',
+        });
+
         await queryInterface.addConstraint('Editions', {
             fields: ['title_id'],
             type: 'foreign key',
-            name: 'FK_title_id', // tên khóa ngoại
+            name: 'fk_editions_title', // optional
             references: {
                 table: 'Titles',
-                field: 'title_id'
+                field: 'title_id',
             },
-            onDelete: 'CASCADE',
-            onUpdate: 'CASCADE'
+            onDelete: 'cascade',
+            onUpdate: 'cascade',
         });
 
-        // Adding foreign key to BookCopies
         await queryInterface.addConstraint('BookCopies', {
             fields: ['edition_id'],
             type: 'foreign key',
-            name: 'FK_edition_id',
+            name: 'fk_book_copies_edition', // optional
             references: {
                 table: 'Editions',
-                field: 'edition_id'
+                field: 'edition_id',
             },
-            onDelete: 'CASCADE',
-            onUpdate: 'CASCADE'
+            onDelete: 'cascade',
+            onUpdate: 'cascade',
         });
 
-        // Adding foreign key to LoanRecords
         await queryInterface.addConstraint('LoanRecords', {
-            fields: ['user_id'],
+            fields: ['reader_id'],
             type: 'foreign key',
-            name: 'FK_member_id',
+            name: 'fk_loan_records_reader', // optional
             references: {
-                table: 'Users',
-                field: 'user_id'
+                table: 'Readers',
+                field: 'reader_id',
             },
-            onDelete: 'CASCADE',
-            onUpdate: 'CASCADE'
+            onDelete: 'cascade',
+            onUpdate: 'cascade',
         });
 
         await queryInterface.addConstraint('LoanRecords', {
             fields: ['copy_id'],
             type: 'foreign key',
-            name: 'FK_copy_id',
+            name: 'fk_loan_records_copy', // optional
             references: {
                 table: 'BookCopies',
-                field: 'copy_id'
+                field: 'copy_id',
             },
-            onDelete: 'CASCADE',
-            onUpdate: 'CASCADE'
+            onDelete: 'cascade',
+            onUpdate: 'cascade',
         });
 
-        // Adding foreign key to Violations
         await queryInterface.addConstraint('Violations', {
             fields: ['transaction_id'],
             type: 'foreign key',
-            name: 'FK_transaction_id',
+            name: 'fk_violations_transaction', // optional
             references: {
                 table: 'LoanRecords',
-                field: 'transaction_id'
+                field: 'transaction_id',
             },
-            onDelete: 'CASCADE',
-            onUpdate: 'CASCADE'
+            onDelete: 'cascade',
+            onUpdate: 'cascade',
         });
 
-        // Adding foreign key to Notifications
-        await queryInterface.addConstraint('Notifications', {
-            fields: ['user_id'],
+        await queryInterface.addConstraint('Readers', {
+            fields: ['account_id'],
             type: 'foreign key',
-            name: 'FK_user_notification',
+            name: 'fk_readers_account', // optional
             references: {
-                table: 'Users',
-                field: 'user_id'
+                table: 'Accounts',
+                field: 'account_id',
             },
-            onDelete: 'CASCADE',
-            onUpdate: 'CASCADE'
+            onDelete: 'cascade',
+            onUpdate: 'cascade',
         });
 
+        await queryInterface.addConstraint('Notifications', {
+            fields: ['reader_id'],
+            type: 'foreign key',
+            name: 'fk_notifications_reader', // optional
+            references: {
+                table: 'Readers',
+                field: 'reader_id',
+            },
+            onDelete: 'cascade',
+            onUpdate: 'cascade',
+        });
 
+        await queryInterface.addConstraint('Users', {
+            fields: ['account_id'],
+            type: 'foreign key',
+            name: 'fk_users_account', // optional
+            references: {
+                table: 'Accounts',
+                field: 'account_id',
+            },
+            onDelete: 'cascade',
+            onUpdate: 'cascade',
+        });
     },
 
+
     async down(queryInterface, Sequelize) {
-        await queryInterface.removeConstraint('Editions', 'FK_title_id');
-        await queryInterface.removeConstraint('BookCopies', 'FK_edition_id');
-        await queryInterface.removeConstraint('LoanRecords', 'FK_member_id');
-        await queryInterface.removeConstraint('LoanRecords', 'FK_copy_id');
-        await queryInterface.removeConstraint('Violations', 'FK_transaction_id');
-        await queryInterface.removeConstraint('Notifications', 'FK_member_notification');
-        await queryInterface.removeConstraint('Members', 'FK_account_member');
-        await queryInterface.removeConstraint('Admins', 'FK_account_admin');
-        await queryInterface.removeConstraint('Librarians', 'FK_account_librarian');
+        await queryInterface.removeConstraint('Titles', 'fk_titles_category');
+        await queryInterface.removeConstraint('Editions', 'fk_editions_title');
+        await queryInterface.removeConstraint('BookCopies', 'fk_book_copies_edition');
+        await queryInterface.removeConstraint('LoanRecords', 'fk_loan_records_reader');
+        await queryInterface.removeConstraint('LoanRecords', 'fk_loan_records_copy');
+        await queryInterface.removeConstraint('Violations', 'fk_violations_transaction');
+        await queryInterface.removeConstraint('Readers', 'fk_readers_account');
+        await queryInterface.removeConstraint('Notifications', 'fk_notifications_reader');
+        await queryInterface.removeConstraint('Users', 'fk_users_account');
     }
 };

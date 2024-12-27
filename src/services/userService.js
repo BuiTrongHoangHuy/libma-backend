@@ -7,7 +7,7 @@ import {ErrorResponse} from "../libs/response";
 
 require('dotenv').config()
 const checkEmailExist = async (email) => {
-    let user = await db.User.findOne({where: {email: email}})
+    let user = await db.Account.findOne({where: {email: email}})
     console.log(user)
     if (user) {
         return true;
@@ -28,13 +28,17 @@ const registerUser = async (rawUserData) => {
         const salt = bcrypt.genSaltSync(10)
 
         let hassPassword = await bcrypt.hash(rawUserData.password, salt)
-        await db.User.create({
+        await db.Account.create({
             email: rawUserData.email,
             password: hassPassword,
             salt: salt,
-            username: rawUserData.email,
+        })
+        let account = await db.Account.findOne({where: {email: rawUserData.email}})
+        await db.User.create({
+            account_id: account.account_id,
             full_name: rawUserData.full_name,
-            role: "Reader",
+            email: rawUserData.email,
+            role: "Admin",
         })
         return {
             message: 'Successfully created user',
@@ -53,10 +57,16 @@ const registerUser = async (rawUserData) => {
 
 const loginUser = async (rawUserData) => {
     try {
-        const user = await db.User.findOne({where: {email: rawUserData.email}});
-        if (user) {
-            const userPassword = await bcrypt.hash(rawUserData.password, user.salt)
-            const isPasswordValid = userPassword === user.password
+        const user = await db.User.findOne(
+            {
+                include: [{model: db.Account, attributes: ['email', 'password', 'salt']}],
+                where: {email: rawUserData.email}
+            });
+        console.log(user)
+        if (user && user.Account) {
+            const userPassword = await bcrypt.hash(rawUserData.password, user.Account.salt)
+            const isPasswordValid = userPassword === user.Account.password
+            console.log(userPassword, user.password)
             if (isPasswordValid) {
                 let payload = {
                     id: user.user_id,

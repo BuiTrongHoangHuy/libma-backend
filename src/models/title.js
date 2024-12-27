@@ -8,6 +8,11 @@ module.exports = (sequelize) => {
                 foreignKey: 'title_id',
                 as: 'editions',
             });
+            Title.belongsTo(models.Category, {
+                foreignKey: 'category_id',
+                as: 'categories'
+            })
+            
         }
     }
 
@@ -26,11 +31,14 @@ module.exports = (sequelize) => {
             type: DataTypes.STRING,
             allowNull: false,
         },
-        category: {
-            type: DataTypes.STRING,
+        category_id: {
+            type: DataTypes.BIGINT,
         },
         summary: {
             type: DataTypes.TEXT,
+        },
+        status: {
+            type: DataTypes.INTEGER,
         },
         createdAt: {
             type: DataTypes.DATE,

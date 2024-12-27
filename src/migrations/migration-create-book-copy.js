@@ -1,41 +1,41 @@
 'use strict';
+const {DataTypes} = require("sequelize");
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
     async up(queryInterface, Sequelize) {
         await queryInterface.createTable('BookCopies', {
             copy_id: {
+                type: Sequelize.BIGINT,
+                primaryKey: true,
                 allowNull: false,
                 autoIncrement: true,
-                primaryKey: true,
-                type: Sequelize.BIGINT
             },
             edition_id: {
                 type: Sequelize.BIGINT,
                 allowNull: false,
-                /*references: {
-                    model: 'Editions',
-                    key: 'edition_id'
-                },
-                onUpdate: 'CASCADE',
-                onDelete: 'CASCADE'*/
             },
             condition: {
-                type: Sequelize.ENUM('New', 'Good', 'Old')
+                type: Sequelize.ENUM('New', 'Good', 'Old'),
             },
             location: {
-                type: Sequelize.STRING
+                type: Sequelize.STRING,
+            },
+            book_status: {
+                type: Sequelize.ENUM('Available', 'Borrowed'),
             },
             status: {
-                type: Sequelize.ENUM('Available', 'Borrowed')
+                type: Sequelize.INTEGER,
+                defaultValue: 1,
+
             },
             createdAt: {
+                type: Sequelize.DATE,
                 allowNull: false,
-                type: Sequelize.DATE
             },
             updatedAt: {
+                type: Sequelize.DATE,
                 allowNull: false,
-                type: Sequelize.DATE
-            }
+            },
         });
     },
     async down(queryInterface, Sequelize) {

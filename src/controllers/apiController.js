@@ -9,9 +9,9 @@ const handleRegister = async (req, res, next) => {
             })
         }
 
-        let response = await userService.createUser(req.body)
+        let response = await userService.registerUser(req.body)
         return res.status(200).json({
-            message: response.msg,
+            message: response.message,
             code: response.code,
         })
     } catch (err) {

@@ -3,6 +3,7 @@ import mysql from 'mysql2/promise'
 import bluebird from 'bluebird'
 import db from '../models/index'
 import {createJWT} from "../middleware/JWTActions"
+import {ErrorResponse} from "../libs/response";
 
 require('dotenv').config()
 const checkEmailExist = async (email) => {
@@ -14,13 +15,13 @@ const checkEmailExist = async (email) => {
     return false;
 }
 
-const createUser = async (rawUserData) => {
+const registerUser = async (rawUserData) => {
     try {
         let isEmailExist = await checkEmailExist(rawUserData.email);
         console.log(isEmailExist)
         if (isEmailExist) {
             return {
-                msg: 'Email already exists',
+                message: 'Email already exists',
                 code: 400,
             }
         }
@@ -33,16 +34,16 @@ const createUser = async (rawUserData) => {
             salt: salt,
             username: rawUserData.email,
             full_name: rawUserData.full_name,
-            role: "Admin",
+            role: "Reader",
         })
         return {
-            msg: 'Successfully created user',
+            message: 'Successfully created user',
             code: 201,
         }
     } catch (e) {
         console.log(e)
         return {
-            msg: 'Something went wrong',
+            message: 'Something went wrong',
             code: 500,
             error: e,
         }
@@ -65,7 +66,7 @@ const loginUser = async (rawUserData) => {
                 }
                 let token = createJWT(payload)
                 return {
-                    msg: 'Login successful',
+                    message: 'Login successful',
                     code: 200,
                     data: {
                         access_token: token,
@@ -73,19 +74,19 @@ const loginUser = async (rawUserData) => {
                 }
             } else {
                 return {
-                    msg: 'Invalid email or password',
+                    message: 'Invalid email or password',
                     code: 401,
                 }
             }
         } else {
             return {
-                msg: 'Invalid email or password',
+                message: 'Invalid email or password',
                 code: 401
             }
         }
     } catch (e) {
         return {
-            msg: e.message,
+            message: e.message,
             code: e.code,
             error: e,
         }
@@ -102,27 +103,70 @@ const listUser = async () => {
                 'address',
                 'role',
                 'status',
-                'createdAt'
+                'createdAt',
+                'updatedAt'
             ]
         });
         console.log(users.every(user => user instanceof db.User)); // true
 
         return {
-            msg: 'Get list user successful',
+            message: 'Get list user successful',
             code: 200,
             data: users
         }
     } catch (error) {
         return {
-            msg: error.message,
+            message: error.message,
             code: error.code,
+            error: error,
+        }
+    }
+}
+const addUser = async (data) => {
+    try {
+        let checkEmail = await db.User.findOne({where: {email: data.email}})
+        if (checkEmail) {
+            return {
+                message: 'Email already exists',
+                code: 400,
+            }
+        }
+        let checkUsername = await db.User.findOne({where: {username: data.username}})
+        if (checkUsername) {
+            return {
+                message: 'Username already exists',
+                code: 400,
+            }
+        }
+        const salt = bcrypt.genSaltSync(10)
+        let hassPassword = await bcrypt.hash(data.password, salt)
+        await db.User.create({
+            email: data.email,
+            password: hassPassword,
+            salt: salt,
+            username: data.username || "",
+            full_name: data.fullName,
+            role: data.role,
+            address: data.address,
+            phone_number: data.phoneNumber,
+        })
+        return {
+            message: 'Successfully created user',
+            code: 201,
+        }
+    } catch (error) {
+        console.log(error)
+        return {
+            message: error.message,
+            code: 500,
             error: error,
         }
     }
 }
 
 module.exports = {
-    createUser,
+    registerUser,
     loginUser,
-    listUser
+    listUser,
+    addUser
 }

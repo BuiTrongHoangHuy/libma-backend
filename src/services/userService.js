@@ -136,6 +136,7 @@ const listUser = async () => {
     }
 }
 const addUser = async (data) => {
+    const transaction = await db.sequelize.transaction();
     try {
         let checkEmail = await db.User.findOne({where: {email: data.email}})
         if (checkEmail) {
@@ -145,21 +146,33 @@ const addUser = async (data) => {
             }
         }
         const salt = bcrypt.genSaltSync(10)
-        let hassPassword = await bcrypt.hash(data.password, salt)
-        await db.User.create({
+        let hashedPassword = await bcrypt.hash(data.password, salt)
+
+        const newAccount = await db.Account.create({
             email: data.email,
-            password: hassPassword,
+            password: hashedPassword,
+            salt: salt,
+        }, {transaction})
+
+        await db.User.create({
+            account_id: newAccount.account_id,
+            email: data.email,
+            password: hashedPassword,
             salt: salt,
             full_name: data.fullName,
-            role: data.role,
+            role: data.role || "Staff",
             address: data.address,
             phone_number: data.phoneNumber,
-        })
+        }, {transaction})
+
+        await transaction.commit()
+
         return {
-            message: 'Successfully created user',
+            message: 'Successfully add user',
             code: 200,
         }
     } catch (error) {
+        await transaction.rollback()
         console.log(error)
         return {
             message: error.message,

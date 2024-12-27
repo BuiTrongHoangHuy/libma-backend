@@ -17,7 +17,7 @@ const listUser = async (req, res) => {
 const addUser = async (req, res) => {
     try {
         if (!req.body.email || !req.body.password
-            || !req.body.fullName || !req.body.username) {
+            || !req.body.fullName) {
             return res.status(400).json({
                 message: 'Missing required fields'
             })

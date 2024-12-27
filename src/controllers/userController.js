@@ -1,5 +1,5 @@
 import userService from "../services/userService";
-import {ErrorResponse} from "../libs/response";
+import {ErrorResponse, SimpleResponse} from "../libs/response";
 
 const listUser = async (req, res) => {
     try {
@@ -31,7 +31,16 @@ const addUser = async (req, res) => {
         return res.status(400).send(ErrorResponse(err))
     }
 }
+const deleteUser = async (req, res) => {
+    try {
+        let response = await userService.deleteUser(req.body.email)
+        return res.status(200).send(SimpleResponse(response))
+    } catch (err) {
+        return res.status(400).send(ErrorResponse(err))
+    }
+}
 module.exports = {
     listUser,
-    addUser
+    addUser,
+    deleteUser
 }

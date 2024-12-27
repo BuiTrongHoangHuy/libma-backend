@@ -1,6 +1,8 @@
 const SimpleResponse = (data) => {
     return {
-        data: data
+        data: data.data,
+        code: data.code,
+        message: data.message,
     }
 }
 

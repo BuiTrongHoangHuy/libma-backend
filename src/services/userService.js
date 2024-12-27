@@ -38,7 +38,7 @@ const registerUser = async (rawUserData) => {
         })
         return {
             message: 'Successfully created user',
-            code: 201,
+            code: 200,
         }
     } catch (e) {
         console.log(e)
@@ -152,7 +152,7 @@ const addUser = async (data) => {
         })
         return {
             message: 'Successfully created user',
-            code: 201,
+            code: 200,
         }
     } catch (error) {
         console.log(error)
@@ -164,9 +164,39 @@ const addUser = async (data) => {
     }
 }
 
+const deleteUser = async (email) => {
+    try {
+        let checkEmail = await db.User.findOne({where: {email: email}})
+        if (!checkEmail) {
+            return {
+                message: 'Email not exists',
+                code: 400,
+            }
+        }
+        await db.User.update(
+            {status: 0},
+            {
+                where: {
+                    email: email,
+                },
+            },
+        );
+        return {
+            message: 'Successfully delete user',
+            code: 200,
+        }
+    } catch (error) {
+        return {
+            message: error.message,
+            code: 500,
+            error: error,
+        }
+    }
+}
 module.exports = {
     registerUser,
     loginUser,
     listUser,
-    addUser
+    addUser,
+    deleteUser
 }

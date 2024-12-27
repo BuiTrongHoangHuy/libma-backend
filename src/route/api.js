@@ -19,6 +19,7 @@ let v1Router = (app) => {
     router.post('/login', apiController.handleLogin)
     router.get('/user/list', userController.listUser)
     router.post('/user/add', userController.addUser)
+    router.put('/user/delete', userController.deleteUser)
 
     return app.use("/api/v1", router);
 }

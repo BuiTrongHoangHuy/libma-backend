@@ -16,6 +16,7 @@ const checkEmailExist = async (email) => {
 }
 
 const registerUser = async (rawUserData) => {
+    const transaction = await db.sequelize.transaction();
     try {
         let isEmailExist = await checkEmailExist(rawUserData.email);
         console.log(isEmailExist)
@@ -27,24 +28,26 @@ const registerUser = async (rawUserData) => {
         }
         const salt = bcrypt.genSaltSync(10)
 
-        let hassPassword = await bcrypt.hash(rawUserData.password, salt)
-        await db.Account.create({
+        let hashedPassword = await bcrypt.hash(rawUserData.password, salt)
+        const newAccount = await db.Account.create({
             email: rawUserData.email,
-            password: hassPassword,
+            password: hashedPassword,
             salt: salt,
-        })
-        let account = await db.Account.findOne({where: {email: rawUserData.email}})
+        }, {transaction})
         await db.User.create({
-            account_id: account.account_id,
+            account_id: newAccount.account_id,
             full_name: rawUserData.full_name,
             email: rawUserData.email,
             role: "Admin",
-        })
+        }, {transaction});
+
+        await transaction.commit()
         return {
             message: 'Successfully created user',
             code: 200,
         }
     } catch (e) {
+        await transaction.rollback()
         console.log(e)
         return {
             message: 'Something went wrong',
@@ -106,7 +109,7 @@ const loginUser = async (rawUserData) => {
 const listUser = async () => {
     try {
         const users = await db.User.findAll({
-            attributes: ['username',
+            attributes: ['user_id',
                 ['full_name', 'fullName'],
                 ['phone_number', 'phoneNumber'],
                 'email',
@@ -141,20 +144,12 @@ const addUser = async (data) => {
                 code: 400,
             }
         }
-        let checkUsername = await db.User.findOne({where: {username: data.username}})
-        if (checkUsername) {
-            return {
-                message: 'Username already exists',
-                code: 400,
-            }
-        }
         const salt = bcrypt.genSaltSync(10)
         let hassPassword = await bcrypt.hash(data.password, salt)
         await db.User.create({
             email: data.email,
             password: hassPassword,
             salt: salt,
-            username: data.username || "",
             full_name: data.fullName,
             role: data.role,
             address: data.address,

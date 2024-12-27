@@ -4,6 +4,7 @@ import apiController from "../controllers/apiController";
 import userController from "../controllers/userController";
 import {checkUserJWT} from "../middleware/JWTActions";
 import {route} from "express/lib/application";
+import readerController from "../controllers/readerController";
 
 let router = express.Router();
 
@@ -20,7 +21,7 @@ let v1Router = (app) => {
     router.get('/user/list', userController.listUser)
     router.post('/user/add', userController.addUser)
     router.put('/user/delete', userController.deleteUser)
-
+    router.get('/reader/list', readerController.listReader)
     return app.use("/api/v1", router);
 }
 

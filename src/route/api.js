@@ -18,11 +18,12 @@ let v1Router = (app) => {
     router.post('/register', apiController.handleRegister
     );
     router.post('/login', apiController.handleLogin)
-    router.get('/user/list', userController.listUser)
-    router.post('/user/add', userController.addUser)
-    router.put('/user/delete', userController.deleteUser)
-    router.get('/reader/list', readerController.listReader)
-    router.post('/reader/add', readerController.createReader)
+    router.get('/users/list', userController.listUser)
+    router.post('/users/add', userController.addUser)
+    router.put('/users/delete', userController.deleteUser)
+    router.get('/readers/list', readerController.listReader)
+    router.post('/readers/add', readerController.createReader)
+    router.get('/readers/:id', readerController.getReaderById);
     return app.use("/api/v1", router);
 }
 

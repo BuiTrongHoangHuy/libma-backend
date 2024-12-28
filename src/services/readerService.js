@@ -77,4 +77,29 @@ const createReader = async (readerData) => {
         }
     }
 };
-module.exports = {listReader, createReader};
+
+const getReaderById = async (id) => {
+    try {
+        const reader = await db.Reader.findOne(
+            {
+                where: {reader_id: id}
+            });
+        if (!reader) {
+            return {
+                message: 'No reader found',
+            }
+        }
+        return {
+            message: 'Get reader detail successful',
+            code: 200,
+            data: reader || {}
+        }
+    } catch (error) {
+        return {
+            message: error.message,
+            code: error.code,
+            error: error,
+        }
+    }
+}
+module.exports = {listReader, createReader, getReaderById};

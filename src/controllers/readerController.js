@@ -28,5 +28,20 @@ const createReader = async (req, res) => {
         res.status(500).send(ErrorResponse(err));
     }
 };
-
-module.exports = {listReader, createReader}
+const getReaderById = async (req, res) => {
+    try {
+        const id = req.params.id;
+        if (!id) {
+            return res.status(400).json({error: 'ID is required'});
+        }
+        const reader = await readerService.getReaderById(id);
+        if (reader) {
+            res.status(200).json(reader);
+        } else {
+            res.status(404).json({error: 'Reader not found'});
+        }
+    } catch (err) {
+        return res.status(400).send(ErrorResponse(err))
+    }
+}
+module.exports = {listReader, createReader, getReaderById}

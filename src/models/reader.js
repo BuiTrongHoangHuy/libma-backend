@@ -5,16 +5,13 @@ module.exports = (sequelize) => {
         static associate(models) {
             // define association here
             Reader.hasMany(models.LoanRecord, {
-                foreignKey: 'reader_id',
-                as: 'loanRecords',
+                foreignKey: 'reader_id'
             });
             Reader.hasMany(models.Notification, {
-                foreignKey: 'reader_id',
-                as: 'notifications',
+                foreignKey: 'reader_id'
             });
             Reader.belongsTo(models.Account, {
-                foreignKey: 'account_id',
-                as: 'account',
+                foreignKey: 'account_id'
             })
         }
     }

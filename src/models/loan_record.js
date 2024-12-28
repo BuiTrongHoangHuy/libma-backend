@@ -5,18 +5,15 @@ module.exports = (sequelize) => {
         static associate(models) {
             // A loan record belongs to a member
             LoanRecord.belongsTo(models.Reader, {
-                foreignKey: 'reader_id',
-                as: 'reader',
+                foreignKey: 'reader_id'
             });
             // A loan record belongs to a book copy
             LoanRecord.belongsTo(models.BookCopy, {
-                foreignKey: 'copy_id',
-                as: 'bookCopy',
+                foreignKey: 'copy_id'
             });
             // A loan record can have many violations
             LoanRecord.hasMany(models.Violation, {
-                foreignKey: 'transaction_id',
-                as: 'violations',
+                foreignKey: 'transaction_id'
             });
         }
     }

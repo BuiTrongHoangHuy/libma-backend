@@ -5,13 +5,11 @@ module.exports = (sequelize) => {
         static associate(models) {
             // A book copy belongs to an edition
             BookCopy.belongsTo(models.Edition, {
-                foreignKey: 'edition_id',
-                as: 'edition',
+                foreignKey: 'edition_id'
             });
             // A book copy can be part of many loan records
             BookCopy.hasMany(models.LoanRecord, {
-                foreignKey: 'copy_id',
-                as: 'loanRecords',
+                foreignKey: 'copy_id'
             });
         }
     }

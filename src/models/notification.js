@@ -5,8 +5,7 @@ module.exports = (sequelize) => {
         static associate(models) {
             // A notification belongs to a member
             Notification.belongsTo(models.Reader, {
-                foreignKey: 'reader_id',
-                as: 'reader',
+                foreignKey: 'reader_id'
             });
         }
     }

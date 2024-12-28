@@ -6,6 +6,7 @@ import {checkUserJWT} from "../middleware/JWTActions";
 import {route} from "express/lib/application";
 import readerController from "../controllers/readerController";
 import categoryController from "../controllers/categoryController";
+import titleController from "../controllers/titleController";
 
 let router = express.Router();
 
@@ -36,6 +37,10 @@ let v1Router = (app) => {
     router.get('/categories/list', categoryController.listCategory);
     router.post('/categories/add', categoryController.createCategory)
     router.put('/categories/:id', categoryController.deleteCategory);
+
+
+    //title
+    router.get('/titles/list', titleController.listTitle);
 
     return app.use("/api/v1", router);
 }

@@ -102,4 +102,34 @@ const getReaderById = async (id) => {
         }
     }
 }
-module.exports = {listReader, createReader, getReaderById};
+
+const deleteReader = async (id) => {
+    try {
+        let checkEmail = await db.Reader.findOne({where: {reader_id: id}})
+        if (!checkEmail) {
+            return {
+                message: 'Reader not found',
+                code: 400,
+            }
+        }
+        await db.Reader.update(
+            {status: 0},
+            {
+                where: {
+                    reader_id: id,
+                },
+            },
+        );
+        return {
+            message: 'Successfully delete reader',
+            code: 200,
+        }
+    } catch (error) {
+        return {
+            message: error.message,
+            code: 500,
+            error: error,
+        }
+    }
+}
+module.exports = {listReader, createReader, getReaderById, deleteReader};

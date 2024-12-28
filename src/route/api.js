@@ -24,6 +24,7 @@ let v1Router = (app) => {
     router.get('/readers/list', readerController.listReader)
     router.post('/readers/add', readerController.createReader)
     router.get('/readers/:id', readerController.getReaderById);
+    router.put('/readers/:id', readerController.deleteReader);
     return app.use("/api/v1", router);
 }
 

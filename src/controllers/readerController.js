@@ -1,5 +1,6 @@
 import readerService from "../services/readerService";
-import {ErrorResponse} from "../libs/response";
+import {ErrorResponse, SimpleResponse} from "../libs/response";
+import userService from "../services/userService";
 
 const listReader = async (req, res) => {
     try {
@@ -44,4 +45,12 @@ const getReaderById = async (req, res) => {
         return res.status(400).send(ErrorResponse(err))
     }
 }
-module.exports = {listReader, createReader, getReaderById}
+const deleteReader = async (req, res) => {
+    try {
+        let response = await readerService.deleteReader(req.params.id)
+        return res.status(200).send(SimpleResponse(response))
+    } catch (err) {
+        return res.status(400).send(ErrorResponse(err))
+    }
+}
+module.exports = {listReader, createReader, getReaderById, deleteReader}

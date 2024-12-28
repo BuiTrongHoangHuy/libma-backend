@@ -50,7 +50,7 @@ const createReader = async (readerData) => {
             salt: salt,
         }, {transaction})
 
-        await db.Reader.create({
+        const newReader = await db.Reader.create({
             account_id: newAccount.account_id,
             email: readerData.email,
             password: hashedPassword,
@@ -66,6 +66,7 @@ const createReader = async (readerData) => {
         return {
             message: 'Successfully add reader',
             code: 200,
+            data: newReader,
         }
     } catch (error) {
         await transaction.rollback()

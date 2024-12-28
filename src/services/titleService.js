@@ -8,7 +8,7 @@ const listTitle = async () => {
                 model: db.Category, attributes: [['category_name', 'categoryName']],
             }],
             attributes: [['title_id', 'titleId'],
-                ['title_name', 'fullName'],
+                ['title_name', 'titleName'],
                 'author',
                 ['category_id', "categoryId"],
                 'summary',
@@ -42,7 +42,7 @@ const createTitle = async (titleData) => {
                 code: 400,
             }
         }
-        await db.Title.create({
+        const titleResponse = await db.Title.create({
             title_name: titleData.titleName,
             author: titleData.author,
             category_id: titleData.categoryId,
@@ -52,6 +52,7 @@ const createTitle = async (titleData) => {
         return {
             message: 'Successfully add title',
             code: 200,
+            data: titleResponse
         }
     } catch (error) {
         return {
@@ -121,4 +122,32 @@ const deleteTitle = async (id) => {
         }
     }
 }
-module.exports = {listTitle, createTitle, getTitleById, deleteTitle};
+
+const updateTitle = async (titleId, titleData) => {
+    try {
+        const title = await db.Title.findByPk(titleId);
+        if (title) {
+            await db.Title.update({
+                title_name: titleData.titleName,
+                author: titleData.author,
+                category_id: titleData.categoryId,
+                summary: titleData.summary,
+                status: titleData.status,
+            }, {
+                where: {title_id: titleId}
+            })
+            return {
+                message: 'Successfully update title',
+                code: 200,
+            }
+        }
+    } catch (error) {
+        return {
+            message: error.message,
+            code: 500,
+            error: error,
+        }
+    }
+
+}
+module.exports = {listTitle, createTitle, getTitleById, deleteTitle, updateTitle};

@@ -87,6 +87,7 @@ const getReaderById = async (id) => {
         if (!reader) {
             return {
                 message: 'No reader found',
+                code: 200,
             }
         }
         return {

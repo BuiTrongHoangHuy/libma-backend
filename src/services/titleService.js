@@ -5,9 +5,9 @@ const listTitle = async () => {
     try {
         const titles = await db.Title.findAll({
             include: [{
-                model: db.Category, attributes: ['category_name'],
+                model: db.Category, attributes: [['category_name', 'categoryName']],
             }],
-            attributes: ['title_id',
+            attributes: [['title_id', 'titleId'],
                 ['title_name', 'fullName'],
                 'author',
                 ['category_id', "categoryId"],
@@ -62,5 +62,35 @@ const createTitle = async (titleData) => {
     }
 };
 
+const getTitleById = async (id) => {
+    try {
+        const title = await db.Title.findOne(
+            {
+                include: [{
+                    model: db.Category, attributes: ['category_name'],
+                }],
+                where: {title_id: id}
+            });
+        if (!title) {
+            return {
+                message: 'No title found',
+                code: 404,
+            }
+        }
 
-module.exports = {listTitle, createTitle};
+        return {
+            message: 'Get reader detail successful',
+            code: 200,
+            data: title || {}
+        }
+    } catch (error) {
+        return {
+            message: error.message,
+            code: error.code,
+            error: error,
+        }
+    }
+}
+
+
+module.exports = {listTitle, createTitle, getTitleById};

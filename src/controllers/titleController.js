@@ -30,4 +30,20 @@ const createTitle = async (req, res) => {
         res.status(500).send(ErrorResponse(err));
     }
 };
-module.exports = {listTitle, createTitle}
+const getTitleById = async (req, res) => {
+    try {
+        const id = req.params.id;
+        if (!id) {
+            return res.status(400).json({error: 'ID is required'});
+        }
+        const title = await titleService.getTitleById(id);
+        if (title) {
+            res.status(200).json(title);
+        } else {
+            res.status(404).json({error: 'Title not found'});
+        }
+    } catch (err) {
+        return res.status(400).send(ErrorResponse(err))
+    }
+}
+module.exports = {listTitle, createTitle, getTitleById}

@@ -3,6 +3,7 @@ import {ErrorResponse, SimpleResponse} from "../libs/response";
 import userService from "../services/userService";
 import titleService from "../services/titleService";
 import categoryService from "../services/categoryService";
+import {title} from "process";
 
 const listTitle = async (req, res) => {
     try {
@@ -46,4 +47,12 @@ const getTitleById = async (req, res) => {
         return res.status(400).send(ErrorResponse(err))
     }
 }
-module.exports = {listTitle, createTitle, getTitleById}
+const deleteTitle = async (req, res) => {
+    try {
+        let response = await titleService.deleteTitle(req.params.id)
+        return res.status(200).send(SimpleResponse(response))
+    } catch (err) {
+        return res.status(400).send(ErrorResponse(err))
+    }
+}
+module.exports = {listTitle, createTitle, getTitleById, deleteTitle}

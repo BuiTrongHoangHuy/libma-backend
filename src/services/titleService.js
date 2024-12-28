@@ -92,5 +92,33 @@ const getTitleById = async (id) => {
     }
 }
 
-
-module.exports = {listTitle, createTitle, getTitleById};
+const deleteTitle = async (id) => {
+    try {
+        let checkTitle = await db.Title.findOne({where: {title_id: id}})
+        if (!checkTitle) {
+            return {
+                message: 'Title not found',
+                code: 404,
+            }
+        }
+        await db.Title.update(
+            {status: 0},
+            {
+                where: {
+                    title_id: id,
+                },
+            },
+        );
+        return {
+            message: 'Successfully delete title',
+            code: 200,
+        }
+    } catch (error) {
+        return {
+            message: error.message,
+            code: 500,
+            error: error,
+        }
+    }
+}
+module.exports = {listTitle, createTitle, getTitleById, deleteTitle};

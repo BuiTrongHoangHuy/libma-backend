@@ -43,6 +43,7 @@ let v1Router = (app) => {
     router.get('/titles/list', titleController.listTitle);
     router.post('/titles/add', titleController.createTitle)
     router.get('/titles/:id', titleController.getTitleById);
+    router.put('/titles/:id', titleController.deleteTitle);
 
     return app.use("/api/v1", router);
 }

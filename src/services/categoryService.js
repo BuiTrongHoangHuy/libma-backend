@@ -54,5 +54,33 @@ const createCategory = async (categoryData) => {
         }
     }
 };
-
-module.exports = {listCategory, createCategory};
+const deleteCategory = async (categoryId) => {
+    try {
+        let checkCategory = await db.Category.findOne({where: {category_id: categoryId}})
+        if (!checkCategory) {
+            return {
+                message: 'Category not found',
+                code: 400,
+            }
+        }
+        await db.Category.update(
+            {status: 0},
+            {
+                where: {
+                    category_id: categoryId,
+                },
+            },
+        );
+        return {
+            message: 'Successfully delete reader',
+            code: 200,
+        }
+    } catch (error) {
+        return {
+            message: error.message,
+            code: 500,
+            error: error,
+        }
+    }
+}
+module.exports = {listCategory, createCategory, deleteCategory};

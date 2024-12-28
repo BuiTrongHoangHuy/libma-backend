@@ -1,6 +1,7 @@
 import {ErrorResponse, SimpleResponse} from "../libs/response";
 import userService from "../services/userService";
 import categoryService from "../services/categoryService";
+import readerService from "../services/readerService";
 
 const listCategory = async (req, res) => {
     try {
@@ -28,4 +29,13 @@ const createCategory = async (req, res) => {
         res.status(500).send(ErrorResponse(err));
     }
 };
-module.exports = {listCategory, createCategory}
+
+const deleteCategory = async (req, res) => {
+    try {
+        let response = await categoryService.deleteCategory(req.params.id)
+        return res.status(200).send(SimpleResponse(response))
+    } catch (err) {
+        return res.status(400).send(ErrorResponse(err))
+    }
+}
+module.exports = {listCategory, createCategory, deleteCategory}

@@ -5,6 +5,7 @@ import userController from "../controllers/userController";
 import {checkUserJWT} from "../middleware/JWTActions";
 import {route} from "express/lib/application";
 import readerController from "../controllers/readerController";
+import categoryController from "../controllers/categoryController";
 
 let router = express.Router();
 
@@ -18,13 +19,22 @@ let v1Router = (app) => {
     router.post('/register', apiController.handleRegister
     );
     router.post('/login', apiController.handleLogin)
+
+    //user
     router.get('/users/list', userController.listUser)
     router.post('/users/add', userController.addUser)
     router.put('/users/delete', userController.deleteUser)
+
+    //reader
     router.get('/readers/list', readerController.listReader)
     router.post('/readers/add', readerController.createReader)
     router.get('/readers/:id', readerController.getReaderById);
     router.put('/readers/:id', readerController.deleteReader);
+
+
+    //category
+    router.get('/categories/list', categoryController.listCategory);
+
     return app.use("/api/v1", router);
 }
 

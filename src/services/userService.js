@@ -138,7 +138,7 @@ const listUser = async () => {
 const addUser = async (data) => {
     const transaction = await db.sequelize.transaction();
     try {
-        let checkEmail = await db.User.findOne({where: {email: data.email}})
+        let checkEmail = await db.Account.findOne({where: {email: data.email}})
         if (checkEmail) {
             return {
                 message: 'Email already exists',

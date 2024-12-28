@@ -33,5 +33,34 @@ const listTitle = async () => {
     }
 }
 
+const createTitle = async (titleData) => {
+    try {
+        let checkTitle = await db.Title.findOne({where: {title_name: titleData.titleName}})
+        if (checkTitle) {
+            return {
+                message: 'Title already exists',
+                code: 400,
+            }
+        }
+        await db.Title.create({
+            title_name: titleData.titleName,
+            author: titleData.author,
+            category_id: titleData.categoryId,
+            summary: titleData.summary,
+            status: titleData.status,
+        })
+        return {
+            message: 'Successfully add title',
+            code: 200,
+        }
+    } catch (error) {
+        return {
+            message: error.message,
+            code: error.code,
+            error: error,
+        }
+    }
+};
 
-module.exports = {listTitle};
+
+module.exports = {listTitle, createTitle};

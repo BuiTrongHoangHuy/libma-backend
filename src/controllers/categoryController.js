@@ -15,4 +15,17 @@ const listCategory = async (req, res) => {
     }
 }
 
-module.exports = {listCategory}
+const createCategory = async (req, res) => {
+    try {
+        if (!req.body.categoryName) {
+            return res.status(400).json({
+                message: 'Missing required fields'
+            })
+        }
+        const reader = await categoryService.createCategory(req.body);
+        res.status(201).json(reader);
+    } catch (err) {
+        res.status(500).send(ErrorResponse(err));
+    }
+};
+module.exports = {listCategory, createCategory}

@@ -28,4 +28,31 @@ const listCategory = async () => {
     }
 }
 
-module.exports = {listCategory};
+const createCategory = async (categoryData) => {
+    try {
+        let checkCategory = await db.Category.findOne({where: {category_name: categoryData.categoryName}})
+        if (checkCategory) {
+            return {
+                message: 'Category already exists',
+                code: 400,
+            }
+        }
+        await db.Category.create({
+            category_name: categoryData.categoryName,
+            note: categoryData.note,
+        })
+        return {
+            message: 'Successfully add Category',
+            code: 200,
+        }
+    } catch (error) {
+        console.log(error)
+        return {
+            message: error.message,
+            code: error.code,
+            error: error,
+        }
+    }
+};
+
+module.exports = {listCategory, createCategory};

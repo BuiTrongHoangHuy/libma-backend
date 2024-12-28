@@ -34,6 +34,7 @@ let v1Router = (app) => {
 
     //category
     router.get('/categories/list', categoryController.listCategory);
+    router.post('/categories/add', categoryController.createCategory)
 
     return app.use("/api/v1", router);
 }

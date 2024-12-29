@@ -48,5 +48,28 @@ const listBookCopy = async () => {
     }
 }
 
+const createBookCopy = async (bookData) => {
+    try {
+        const bookResponse = await db.BookCopy.create({
+            edition_id: bookData.editionId,
+            condition: bookData.condition || "New",
+            location: bookData.location,
+            book_status: bookData.bookStatus || "Available",
+            status: bookData.status,
+        })
+        return {
+            message: 'Successfully add bookCopy',
+            code: 200,
+            data: bookResponse
+        }
+    } catch (error) {
+        return {
+            message: error.message,
+            code: error.code,
+            error: error,
+        }
+    }
+};
 
-module.exports = {listBookCopy};
+
+module.exports = {listBookCopy, createBookCopy};

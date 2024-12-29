@@ -18,5 +18,18 @@ const listBook = async (req, res) => {
         return res.status(400).send(ErrorResponse(err))
     }
 }
+const createBook = async (req, res) => {
+    try {
+        if (!req.body.editionId) {
+            return res.status(400).json({
+                message: 'Missing required fields'
+            })
+        }
+        const edition = await bookCopyService.createBookCopy(req.body);
+        res.status(201).json(edition);
+    } catch (err) {
+        res.status(500).send(ErrorResponse(err));
+    }
+};
 
-module.exports = {listBook}
+module.exports = {listBook, createBook}

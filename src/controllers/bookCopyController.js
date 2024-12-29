@@ -47,5 +47,14 @@ const getBookById = async (req, res) => {
         return res.status(400).send(ErrorResponse(err))
     }
 }
+const deleteBook = async (req, res) => {
+    try {
+        let response = await bookCopyService.deleteBookCopy(req.params.id)
+        return res.status(200).send(SimpleResponse(response))
+    } catch (err) {
+        return res.status(400).send(ErrorResponse(err))
+    }
+}
 
-module.exports = {listBook, createBook, getBookById}
+
+module.exports = {listBook, createBook, getBookById, deleteBook}

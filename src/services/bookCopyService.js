@@ -125,5 +125,35 @@ const getBookCopyById = async (id) => {
     }
 }
 
+const deleteBookCopy = async (id) => {
+    try {
+        let checkBook = await db.BookCopy.findOne({where: {copy_id: id}})
+        if (!checkBook) {
+            return {
+                message: 'Book copy not found',
+                code: 404,
+            }
+        }
+        await db.BookCopy.update(
+            {status: 0},
+            {
+                where: {
+                    copy_id: id,
+                },
+            },
+        );
+        return {
+            message: 'Successfully delete book copy',
+            code: 200,
+        }
+    } catch (error) {
+        return {
+            message: error.message,
+            code: 500,
+            error: error,
+        }
+    }
+}
 
-module.exports = {listBookCopy, createBookCopy, getBookCopyById};
+
+module.exports = {listBookCopy, createBookCopy, getBookCopyById, deleteBookCopy};

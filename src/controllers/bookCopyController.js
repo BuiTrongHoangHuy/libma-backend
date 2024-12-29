@@ -56,5 +56,22 @@ const deleteBook = async (req, res) => {
     }
 }
 
+const updateBook = async (req, res) => {
+    try {
+        const id = req.params.id;
+        if (!id) {
+            return res.status(400).json({error: 'ID is required'});
+        }
+        const title = await bookCopyService.updateBookCopy(req.params.id, req.body);
+        if (title) {
+            res.status(200).json(title);
+        } else {
+            res.status(404).json({error: 'Book copy not found'});
+        }
 
-module.exports = {listBook, createBook, getBookById, deleteBook}
+    } catch (err) {
+        return res.status(400).send(ErrorResponse(err))
+
+    }
+}
+module.exports = {listBook, createBook, getBookById, deleteBook, updateBook}

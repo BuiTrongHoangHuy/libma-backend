@@ -61,6 +61,7 @@ let v1Router = (app) => {
     router.post('/bookCopies/add', bookCopyController.createBook);
     router.get('/bookCopies/:id', bookCopyController.getBookById);
     router.put('/bookCopies/delete/:id', bookCopyController.deleteBook);
+    router.put('/bookCopies/:id', bookCopyController.updateBook);
 
     return app.use("/api/v1", router);
 }

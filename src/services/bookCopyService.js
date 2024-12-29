@@ -155,5 +155,31 @@ const deleteBookCopy = async (id) => {
     }
 }
 
+const updateBookCopy = async (bookId, bookData) => {
+    try {
+        const book = await db.BookCopy.findByPk(bookId);
+        if (book) {
+            await db.BookCopy.update({
+                edition_id: bookData.editionId,
+                condition: bookData.condition,
+                location: bookData.location,
+                book_status: bookData.bookStatus,
+                status: bookData.status,
+            }, {
+                where: {copy_id: bookId}
+            })
+            return {
+                message: 'Successfully update book copy',
+                code: 200,
+            }
+        }
+    } catch (error) {
+        return {
+            message: error.message,
+            code: 500,
+            error: error,
+        }
+    }
 
-module.exports = {listBookCopy, createBookCopy, getBookCopyById, deleteBookCopy};
+}
+module.exports = {listBookCopy, createBookCopy, getBookCopyById, deleteBookCopy, updateBookCopy};

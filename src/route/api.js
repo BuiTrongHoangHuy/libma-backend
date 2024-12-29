@@ -7,6 +7,7 @@ import {route} from "express/lib/application";
 import readerController from "../controllers/readerController";
 import categoryController from "../controllers/categoryController";
 import titleController from "../controllers/titleController";
+import editionController from "../controllers/editionController";
 
 let router = express.Router();
 
@@ -45,6 +46,10 @@ let v1Router = (app) => {
     router.get('/titles/:id', titleController.getTitleById);
     router.put('/titles/delete/:id', titleController.deleteTitle);
     router.put('/titles/:id', titleController.updateTitle);
+
+
+    //edition
+    router.get('/editions/list', editionController.listEdition);
 
     return app.use("/api/v1", router);
 }

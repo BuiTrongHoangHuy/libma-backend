@@ -72,5 +72,50 @@ const createEdition = async (editionData) => {
     }
 };
 
+const getEditionById = async (id) => {
+    try {
+        const edition = await db.Edition.findOne(
+            {
+                include: [{
+                    model: db.Title, attributes: [['title_name', 'titleName'], ['title_id', 'titleId'], 'author'],
+                    include: [{
+                        model: db.Category,
+                        attributes: [['category_id', 'categoryId'], ['category_name', 'categoryName']]
+                    }],
+                }],
+                attributes: [['edition_id', 'editionId'],
+                    ['edition_number', 'editionNumber'],
+                    ['publication_year', 'publicationYear'],
+                    'publisher',
+                    'pages',
+                    ['thumbnail_url', 'thumbnailUrl'],
+                    'isbn',
+                    'status',
+                    'createdAt',
+                    'updatedAt'
+                ],
+                where: {edition_id: id}
+            });
+        if (!edition) {
+            return {
+                message: 'No edition found',
+                code: 404,
+            }
+        }
 
-module.exports = {listEdition, createEdition};
+        return {
+            message: 'Get edition detail successful',
+            code: 200,
+            data: edition || {}
+        }
+    } catch (error) {
+        return {
+            message: error.message,
+            code: error.code,
+            error: error,
+        }
+    }
+}
+
+
+module.exports = {listEdition, createEdition, getEditionById};

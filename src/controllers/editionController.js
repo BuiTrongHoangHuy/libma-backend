@@ -30,5 +30,21 @@ const createEdition = async (req, res) => {
         res.status(500).send(ErrorResponse(err));
     }
 };
+const getEditionById = async (req, res) => {
+    try {
+        const id = req.params.id;
+        if (!id) {
+            return res.status(400).json({error: 'ID is required'});
+        }
+        const edition = await editionService.getEditionById(id);
+        if (edition) {
+            res.status(200).json(edition);
+        } else {
+            res.status(404).json({error: 'Edition not found'});
+        }
+    } catch (err) {
+        return res.status(400).send(ErrorResponse(err))
+    }
+}
 
-module.exports = {listEdition, createEdition}
+module.exports = {listEdition, createEdition, getEditionById}

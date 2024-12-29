@@ -80,7 +80,7 @@ const getTitleById = async (id) => {
         }
 
         return {
-            message: 'Get reader detail successful',
+            message: 'Get title detail successful',
             code: 200,
             data: title || {}
         }

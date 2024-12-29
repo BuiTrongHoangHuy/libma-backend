@@ -52,6 +52,7 @@ let v1Router = (app) => {
     router.get('/editions/list', editionController.listEdition);
     router.post('/editions/add', editionController.createEdition);
     router.get('/editions/:id', editionController.getEditionById);
+    router.put('/editions/delete/:id', editionController.deleteEdition);
     return app.use("/api/v1", router);
 }
 

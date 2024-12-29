@@ -117,5 +117,35 @@ const getEditionById = async (id) => {
     }
 }
 
+const deleteEdition = async (id) => {
+    try {
+        let checkEdition = await db.Edition.findOne({where: {edition_id: id}})
+        if (!checkEdition) {
+            return {
+                message: 'Edition not found',
+                code: 404,
+            }
+        }
+        await db.Edition.update(
+            {status: 0},
+            {
+                where: {
+                    edition_id: id,
+                },
+            },
+        );
+        return {
+            message: 'Successfully delete edition',
+            code: 200,
+        }
+    } catch (error) {
+        return {
+            message: error.message,
+            code: 500,
+            error: error,
+        }
+    }
+}
 
-module.exports = {listEdition, createEdition, getEditionById};
+
+module.exports = {listEdition, createEdition, getEditionById, deleteEdition};

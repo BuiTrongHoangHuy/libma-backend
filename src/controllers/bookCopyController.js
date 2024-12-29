@@ -31,5 +31,21 @@ const createBook = async (req, res) => {
         res.status(500).send(ErrorResponse(err));
     }
 };
+const getBookById = async (req, res) => {
+    try {
+        const id = req.params.id;
+        if (!id) {
+            return res.status(400).json({error: 'ID is required'});
+        }
+        const edition = await bookCopyService.getBookCopyById(id);
+        if (edition) {
+            res.status(200).json(edition);
+        } else {
+            res.status(404).json({error: 'Book copy not found'});
+        }
+    } catch (err) {
+        return res.status(400).send(ErrorResponse(err))
+    }
+}
 
-module.exports = {listBook, createBook}
+module.exports = {listBook, createBook, getBookById}

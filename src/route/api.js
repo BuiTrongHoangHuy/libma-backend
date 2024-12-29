@@ -59,6 +59,7 @@ let v1Router = (app) => {
     //book copy
     router.get('/bookCopies/list', bookCopyController.listBook);
     router.post('/bookCopies/add', bookCopyController.createBook);
+    router.get('/bookCopies/:id', bookCopyController.getBookById);
 
     return app.use("/api/v1", router);
 }

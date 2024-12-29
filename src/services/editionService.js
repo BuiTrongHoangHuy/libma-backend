@@ -147,5 +147,34 @@ const deleteEdition = async (id) => {
     }
 }
 
+const updateEdition = async (editionId, editionData) => {
+    try {
+        const edition = await db.Edition.findByPk(editionId);
+        if (edition) {
+            await db.Edition.update({
+                title_id: editionData.titleId,
+                edition_number: editionData.editionNumber,
+                publication_year: editionData.publicationYear,
+                publisher: editionData.publisher,
+                pages: editionData.pages,
+                thumbnail_url: editionData.thumbnailUrl,
+                isbn: editionData.isbn,
+                status: editionData.status,
+            }, {
+                where: {edition_id: editionId}
+            })
+            return {
+                message: 'Successfully update edition',
+                code: 200,
+            }
+        }
+    } catch (error) {
+        return {
+            message: error.message,
+            code: 500,
+            error: error,
+        }
+    }
 
-module.exports = {listEdition, createEdition, getEditionById, deleteEdition};
+}
+module.exports = {listEdition, createEdition, getEditionById, deleteEdition, updateEdition};

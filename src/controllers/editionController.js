@@ -55,5 +55,22 @@ const deleteEdition = async (req, res) => {
     }
 }
 
+const updateEdition = async (req, res) => {
+    try {
+        const id = req.params.id;
+        if (!id) {
+            return res.status(400).json({error: 'ID is required'});
+        }
+        const title = await editionService.updateEdition(req.params.id, req.body);
+        if (title) {
+            res.status(200).json(title);
+        } else {
+            res.status(404).json({error: 'Edition not found'});
+        }
 
-module.exports = {listEdition, createEdition, getEditionById, deleteEdition}
+    } catch (err) {
+        return res.status(400).send(ErrorResponse(err))
+
+    }
+}
+module.exports = {listEdition, createEdition, getEditionById, deleteEdition, updateEdition}

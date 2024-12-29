@@ -17,5 +17,18 @@ const listEdition = async (req, res) => {
         return res.status(400).send(ErrorResponse(err))
     }
 }
+const createEdition = async (req, res) => {
+    try {
+        if (!req.body.titleId || !req.body.isbn) {
+            return res.status(400).json({
+                message: 'Missing required fields'
+            })
+        }
+        const edition = await editionService.createEdition(req.body);
+        res.status(201).json(edition);
+    } catch (err) {
+        res.status(500).send(ErrorResponse(err));
+    }
+};
 
-module.exports = {listEdition}
+module.exports = {listEdition, createEdition}

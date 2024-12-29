@@ -39,5 +39,38 @@ const listEdition = async () => {
     }
 }
 
+const createEdition = async (editionData) => {
+    try {
+        let checkEdition = await db.Edition.findOne({where: {isbn: editionData.isbn}})
+        if (checkEdition) {
+            return {
+                message: 'Edition already exists',
+                code: 400,
+            }
+        }
+        const editionResponse = await db.Edition.create({
+            title_id: editionData.titleId,
+            edition_number: editionData.editionNumber,
+            publication_year: editionData.publicationYear,
+            publisher: editionData.publisher,
+            pages: editionData.pages,
+            thumbnail_url: editionData.thumbnailUrl,
+            isbn: editionData.isbn,
+            status: editionData.status,
+        })
+        return {
+            message: 'Successfully add edition',
+            code: 200,
+            data: editionResponse
+        }
+    } catch (error) {
+        return {
+            message: error.message,
+            code: error.code,
+            error: error,
+        }
+    }
+};
 
-module.exports = {listEdition};
+
+module.exports = {listEdition, createEdition};

@@ -25,8 +25,8 @@ const createTitle = async (req, res) => {
                 message: 'Missing required fields'
             })
         }
-        const reader = await titleService.createTitle(req.body);
-        res.status(201).json(reader);
+        const title = await titleService.createTitle(req.body);
+        res.status(201).json(title);
     } catch (err) {
         res.status(500).send(ErrorResponse(err));
     }

@@ -50,6 +50,7 @@ let v1Router = (app) => {
 
     //edition
     router.get('/editions/list', editionController.listEdition);
+    router.post('/editions/add', editionController.createEdition);
 
     return app.use("/api/v1", router);
 }

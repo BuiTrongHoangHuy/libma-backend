@@ -31,5 +31,21 @@ const createLoanRecord = async (req, res) => {
         res.status(500).send(ErrorResponse(err));
     }
 };
+const getLoanRecordById = async (req, res) => {
+    try {
+        const id = req.params.id;
+        if (!id) {
+            return res.status(400).json({error: 'ID is required'});
+        }
+        const record = await loanRecordService.getLoanRecordById(id);
+        if (record) {
+            res.status(200).json(record);
+        } else {
+            res.status(404).json({error: 'loan record not found'});
+        }
+    } catch (err) {
+        return res.status(400).send(ErrorResponse(err))
+    }
+}
 
-module.exports = {listLoanRecord, createLoanRecord}
+module.exports = {listLoanRecord, createLoanRecord, getLoanRecordById}

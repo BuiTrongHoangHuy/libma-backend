@@ -70,5 +70,61 @@ const createLoanRecord = async (data) => {
     }
 };
 
+const getLoanRecordById = async (id) => {
+    try {
+        const record = await db.LoanRecord.findOne(
+            {
+                include: [{
+                    model: db.Reader,
+                    attributes: [
+                        ['reader_id', 'readerId'],
+                        ['account_id', 'accountId'],
+                        ['phone_number', 'phoneNumber'],
+                        'email',
+                        ['full_name', 'fullName'],
+                        'address',
+                        'type',
+                        'status',
+                    ],
+                }, {
+                    model: db.BookCopy,
+                    attributes: [
+                        ['copy_id', 'copyId'],
+                        ['edition_id', 'editionId'],
+                    ]
+                }
+                ],
+                attributes: [['transaction_id', 'transactionId'],
+                    ['reader_id', 'readerId'],
+                    ['copy_id', 'copyId'],
+                    ['loan_date', 'loanDate'],
+                    ['due_date', 'dueDate'],
+                    'fine',
+                    'status',
+                    'createdAt',
+                    'updatedAt'
+                ],
+                where: {transaction_id: id}
+            });
+        if (!record) {
+            return {
+                message: 'No loan record found',
+                code: 404,
+            }
+        }
 
-module.exports = {listLoanRecord, createLoanRecord};
+        return {
+            message: 'Get loan record detail successful',
+            code: 200,
+            data: record || {}
+        }
+    } catch (error) {
+        return {
+            message: error.message,
+            code: error.code,
+            error: error,
+        }
+    }
+}
+
+module.exports = {listLoanRecord, createLoanRecord, getLoanRecordById};

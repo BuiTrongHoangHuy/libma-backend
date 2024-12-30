@@ -25,8 +25,8 @@ const createBook = async (req, res) => {
                 message: 'Missing required fields'
             })
         }
-        const edition = await bookCopyService.createBookCopy(req.body);
-        res.status(201).json(edition);
+        const book = await bookCopyService.createBookCopy(req.body);
+        res.status(201).json(book);
     } catch (err) {
         res.status(500).send(ErrorResponse(err));
     }
@@ -37,9 +37,9 @@ const getBookById = async (req, res) => {
         if (!id) {
             return res.status(400).json({error: 'ID is required'});
         }
-        const edition = await bookCopyService.getBookCopyById(id);
-        if (edition) {
-            res.status(200).json(edition);
+        const book = await bookCopyService.getBookCopyById(id);
+        if (book) {
+            res.status(200).json(book);
         } else {
             res.status(404).json({error: 'Book copy not found'});
         }
@@ -62,9 +62,9 @@ const updateBook = async (req, res) => {
         if (!id) {
             return res.status(400).json({error: 'ID is required'});
         }
-        const title = await bookCopyService.updateBookCopy(req.params.id, req.body);
-        if (title) {
-            res.status(200).json(title);
+        const book = await bookCopyService.updateBookCopy(req.params.id, req.body);
+        if (book) {
+            res.status(200).json(book);
         } else {
             res.status(404).json({error: 'Book copy not found'});
         }

@@ -61,9 +61,9 @@ const updateEdition = async (req, res) => {
         if (!id) {
             return res.status(400).json({error: 'ID is required'});
         }
-        const title = await editionService.updateEdition(req.params.id, req.body);
-        if (title) {
-            res.status(200).json(title);
+        const edition = await editionService.updateEdition(req.params.id, req.body);
+        if (edition) {
+            res.status(200).json(edition);
         } else {
             res.status(404).json({error: 'Edition not found'});
         }

@@ -6,7 +6,6 @@ module.exports = (sequelize) => {
             // A violation belongs to a loan record
             Violation.belongsTo(models.LoanRecord, {
                 foreignKey: 'transaction_id',
-                as: 'loanRecord',
             });
         }
     }

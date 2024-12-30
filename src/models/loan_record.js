@@ -25,7 +25,7 @@ module.exports = (sequelize) => {
             allowNull: false,
             autoIncrement: true,
         },
-        member_id: {
+        reader_id: {
             type: DataTypes.BIGINT,
             allowNull: false,
         },

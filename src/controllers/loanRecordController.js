@@ -18,5 +18,18 @@ const listLoanRecord = async (req, res) => {
         return res.status(400).send(ErrorResponse(err))
     }
 }
+const createLoanRecord = async (req, res) => {
+    try {
+        if (!req.body.readerId || !req.body.copyId || !req.body.loanDate || !req.body.dueDate) {
+            return res.status(400).json({
+                message: 'Missing required fields'
+            })
+        }
+        const edition = await loanRecordService.createLoanRecord(req.body);
+        res.status(201).json(edition);
+    } catch (err) {
+        res.status(500).send(ErrorResponse(err));
+    }
+};
 
-module.exports = {listLoanRecord}
+module.exports = {listLoanRecord, createLoanRecord}

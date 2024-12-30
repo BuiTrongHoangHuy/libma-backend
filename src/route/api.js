@@ -67,6 +67,7 @@ let v1Router = (app) => {
 
     //loan record
     router.get('/loanRecords/list', loanRecordController.listLoanRecord);
+    router.post('/loanRecords/add', loanRecordController.createLoanRecord);
 
     return app.use("/api/v1", router);
 }

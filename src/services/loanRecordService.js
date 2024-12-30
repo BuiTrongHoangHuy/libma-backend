@@ -45,4 +45,30 @@ const listLoanRecord = async () => {
     }
 }
 
-module.exports = {listLoanRecord};
+const createLoanRecord = async (data) => {
+    try {
+        const recordResponse = await db.LoanRecord.create({
+            reader_id: data.readerId,
+            copy_id: data.copyId,
+            loan_date: data.loanDate,
+            due_date: data.dueDate,
+            return_date: data.returnDate,
+            fine: data.fine,
+            status: data.status,
+        })
+        return {
+            message: 'Successfully add loan record',
+            code: 200,
+            data: recordResponse
+        }
+    } catch (error) {
+        return {
+            message: error.message,
+            code: error.code,
+            error: error,
+        }
+    }
+};
+
+
+module.exports = {listLoanRecord, createLoanRecord};

@@ -1,6 +1,5 @@
 import bcrypt from 'bcryptjs'
 import mysql from 'mysql2/promise'
-import bluebird from 'bluebird'
 import db from '../models/index'
 import {createJWT} from "../middleware/JWTActions"
 import {ErrorResponse} from "../libs/response";

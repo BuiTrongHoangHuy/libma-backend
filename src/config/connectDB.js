@@ -3,16 +3,18 @@ require('dotenv').config();
 const DB_ADDRESS = process.env.DB_ADDRESS || 'localhost';
 const MYSQL_PASSWORD = process.env.MYSQL_PASSWORD || 'password';
 const DB_DIALECT = process.env.DB_DIALECT || 'mysql';
+const DB_URL = process.env.DATABASE_URL || 'mysql';
 // Option 1: Passing a connection URI
 //const sequelize = new Sequelize('sqlite::memory:') // Example for sqlite
 //const sequelize = new Sequelize('postgres://user:pass@example.com:5432/dbname') // Example for postgres
 
 // Option 3: Passing parameters separately (other dialects)
-const sequelize = new Sequelize('libma', 'admin', MYSQL_PASSWORD, {
+/*const sequelize = new Sequelize('libma', 'admin', MYSQL_PASSWORD, {
     host: DB_ADDRESS,
     dialect: DB_DIALECT
-});
+});*/
 
+const sequelize = new Sequelize(DB_URL)
 let connectDB = async () => {
     try {
         await sequelize.authenticate();

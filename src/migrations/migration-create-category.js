@@ -14,6 +14,9 @@ module.exports = {
                 type: Sequelize.STRING,
                 allowNull: false
             },
+            note:{
+                type: Sequelize.STRING,
+            },
             status: {
                 type: Sequelize.INTEGER,
                 defaultValue: 1,

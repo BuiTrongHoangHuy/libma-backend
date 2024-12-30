@@ -30,6 +30,9 @@ module.exports = {
                 type: DataTypes.ENUM('Admin', 'Staff', 'Librarian'),
                 allowNull: false
             },
+            address: {
+                type: Sequelize.STRING,
+            },
             status: {
                 type: Sequelize.INTEGER,
                 defaultValue: 1,

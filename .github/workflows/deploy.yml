@@ -1,0 +1,45 @@
+name: Deploy
+on:
+  push:
+    branches:
+      - deploy
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      # Checkout source code
+      - uses: actions/checkout@v4
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      # Build Docker image
+      - name: Build and Push Docker Image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: ./Dockerfile
+          push: true
+          tags: zephyrion0309/libma:latest
+
+      # Deploy
+      - name: Deploy
+        env:
+          PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          HOSTNAME: ${{ secrets.API_HOST }}
+          USER_NAME: ${{ secrets.SSH_USER_NAME }}
+        run: |
+          echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
+          ssh -o StrictHostKeyChecking=no -i private_key ${USER_NAME}@${HOSTNAME} '
+              APP_NAME=libma &&
+              docker rm -f ${APP_NAME} &&
+              docker run -d --name ${APP_NAME} \
+              -p 3300:3300 \
+              -v $PWD/libmaconfig/.env:/app/.env \
+               zephyrion0309/${APP_NAME}:latest
+          '

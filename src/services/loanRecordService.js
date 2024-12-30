@@ -127,4 +127,34 @@ const getLoanRecordById = async (id) => {
     }
 }
 
-module.exports = {listLoanRecord, createLoanRecord, getLoanRecordById};
+const deleteLoanRecord = async (id) => {
+    try {
+        let checkRecord = await db.LoanRecord.findOne({where: {transaction_id: id}})
+        if (!checkRecord) {
+            return {
+                message: 'Loan record not found',
+                code: 404,
+            }
+        }
+        await db.LoanRecord.update(
+            {status: 0},
+            {
+                where: {
+                    transaction_id: id,
+                },
+            },
+        );
+        return {
+            message: 'Successfully delete loan record',
+            code: 200,
+        }
+    } catch (error) {
+        return {
+            message: error.message,
+            code: 500,
+            error: error,
+        }
+    }
+}
+
+module.exports = {listLoanRecord, createLoanRecord, getLoanRecordById, deleteLoanRecord};

@@ -47,5 +47,14 @@ const getLoanRecordById = async (req, res) => {
         return res.status(400).send(ErrorResponse(err))
     }
 }
+const deleteLoanRecord = async (req, res) => {
+    try {
+        let response = await loanRecordService.deleteLoanRecord(req.params.id)
+        return res.status(200).send(SimpleResponse(response))
+    } catch (err) {
+        return res.status(400).send(ErrorResponse(err))
+    }
+}
 
-module.exports = {listLoanRecord, createLoanRecord, getLoanRecordById}
+
+module.exports = {listLoanRecord, createLoanRecord, getLoanRecordById, deleteLoanRecord}

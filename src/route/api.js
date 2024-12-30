@@ -9,6 +9,7 @@ import categoryController from "../controllers/categoryController";
 import titleController from "../controllers/titleController";
 import editionController from "../controllers/editionController";
 import bookCopyController from "../controllers/bookCopyController";
+import loanRecordController from "../controllers/loanRecordController";
 
 let router = express.Router();
 
@@ -62,6 +63,10 @@ let v1Router = (app) => {
     router.get('/bookCopies/:id', bookCopyController.getBookById);
     router.put('/bookCopies/delete/:id', bookCopyController.deleteBook);
     router.put('/bookCopies/:id', bookCopyController.updateBook);
+
+
+    //loan record
+    router.get('/loanRecords/list', loanRecordController.listLoanRecord);
 
     return app.use("/api/v1", router);
 }

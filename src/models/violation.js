@@ -36,6 +36,12 @@ module.exports = (sequelize) => {
             type: DataTypes.INTEGER,
             defaultValue: false,
         },
+        penalty_date: {
+            type: DataTypes.DATE
+        },
+        penalty_end_date: {
+            type: DataTypes.DATE
+        },
         status: {
             type: DataTypes.INTEGER
         },

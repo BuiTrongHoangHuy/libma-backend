@@ -70,6 +70,7 @@ let v1Router = (app) => {
     router.post('/loanRecords/add', loanRecordController.createLoanRecord);
     router.get('/loanRecords/:id', loanRecordController.getLoanRecordById);
     router.put('/loanRecords/delete/:id', loanRecordController.deleteLoanRecord);
+    router.put('/loanRecords/:id', loanRecordController.updateLoanRecord);
 
     return app.use("/api/v1", router);
 }

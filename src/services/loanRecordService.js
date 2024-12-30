@@ -157,4 +157,33 @@ const deleteLoanRecord = async (id) => {
     }
 }
 
-module.exports = {listLoanRecord, createLoanRecord, getLoanRecordById, deleteLoanRecord};
+const updateLoanRecord = async (recordId, data) => {
+    try {
+        const record = await db.LoanRecord.findByPk(recordId);
+        if (record) {
+            await db.LoanRecord.update({
+                reader_id: data.readerId,
+                copy_id: data.copyId,
+                loan_date: data.loanDate,
+                due_date: data.dueDate,
+                return_date: data.returnDate,
+                fine: data.fine,
+                status: data.status,
+            }, {
+                where: {transaction_id: recordId}
+            })
+            return {
+                message: 'Successfully update loan record',
+                code: 200,
+            }
+        }
+    } catch (error) {
+        return {
+            message: error.message,
+            code: 500,
+            error: error,
+        }
+    }
+
+}
+module.exports = {listLoanRecord, createLoanRecord, getLoanRecordById, deleteLoanRecord, updateLoanRecord};

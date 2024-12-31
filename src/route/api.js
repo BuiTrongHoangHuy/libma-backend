@@ -7,6 +7,7 @@ import titleController from "../controllers/titleController";
 import editionController from "../controllers/editionController";
 import bookCopyController from "../controllers/bookCopyController";
 import loanRecordController from "../controllers/loanRecordController";
+import violationController from "../controllers/violationController";
 
 let router = express.Router();
 
@@ -70,6 +71,10 @@ let v1Router = (app) => {
     router.get('/loanRecords/:id', loanRecordController.getLoanRecordById);
     router.put('/loanRecords/delete/:id', loanRecordController.deleteLoanRecord);
     router.put('/loanRecords/:id', loanRecordController.updateLoanRecord);
+
+
+    //violation
+    router.get('/violations/list', violationController.listViolation);
 
     return app.use("/api/v1", router);
 }

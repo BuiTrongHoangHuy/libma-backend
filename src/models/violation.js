@@ -6,7 +6,6 @@ module.exports = (sequelize) => {
             // A violation belongs to a loan record
             Violation.belongsTo(models.LoanRecord, {
                 foreignKey: 'transaction_id',
-                as: 'loanRecord',
             });
         }
     }
@@ -35,6 +34,12 @@ module.exports = (sequelize) => {
         resolved: {
             type: DataTypes.INTEGER,
             defaultValue: false,
+        },
+        penalty_date: {
+            type: DataTypes.DATE
+        },
+        penalty_end_date: {
+            type: DataTypes.DATE
         },
         status: {
             type: DataTypes.INTEGER

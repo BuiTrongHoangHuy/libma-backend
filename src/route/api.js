@@ -18,7 +18,7 @@ let v1Router = (app) => {
         return res.send('hello  12');
     });
     router.get("/ping", (req, res) => {
-        res.send("pong");
+        return res.send("pong");
     })
     router.post('/register', apiController.handleRegister
     );

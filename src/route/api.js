@@ -15,7 +15,7 @@ let router = express.Router();
 let v1Router = (app) => {
 
     router.get('/', (req, res) => {
-        return res.send('test deploy 2');
+        return res.send('test deploy');
     });
     router.get("/ping", (req, res) => {
         return res.send("pong");

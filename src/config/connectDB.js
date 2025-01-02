@@ -8,12 +8,12 @@ const MYSQL_USER = process.env.MYSQL_USER || 'admin';
 const DB_DIALECT = process.env.DB_DIALECT || 'mysql';
 const MYSQL_PORT = process.env.MYSQL_PORT || '3306';
 // Option 3: Passing parameters separately (other dialects)
-/*const sequelize = new Sequelize(MYSQL_DATABASE, MYSQL_USER, MYSQL_PASSWORD, {
+const sequelize = new Sequelize(MYSQL_DATABASE, MYSQL_USER, MYSQL_PASSWORD, {
     host: DB_ADDRESS,
     dialect: DB_DIALECT
-});*/
+});
 
-const sequelize = new Sequelize(DB_URL)
+//const sequelize = new Sequelize(DB_URL)
 let connectDB = async () => {
     try {
         await sequelize.authenticate();

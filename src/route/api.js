@@ -28,6 +28,7 @@ let v1Router = (app) => {
     router.get('/users/list', userController.listUser)
     router.post('/users/add', userController.addUser)
     router.put('/users/delete', userController.deleteUser)
+    router.get('/users/:id', userController.getUserById);
 
     //reader
     router.get('/readers/list', readerController.listReader)

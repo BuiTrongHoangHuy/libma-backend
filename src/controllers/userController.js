@@ -1,5 +1,6 @@
 import userService from "../services/userService";
 import {ErrorResponse, SimpleResponse} from "../libs/response";
+import readerService from "../services/readerService";
 
 const listUser = async (req, res) => {
     try {
@@ -39,8 +40,25 @@ const deleteUser = async (req, res) => {
         return res.status(400).send(ErrorResponse(err))
     }
 }
+const getUserById = async (req, res) => {
+    try {
+        const id = req.params.id;
+        if (!id) {
+            return res.status(400).json({error: 'ID is required'});
+        }
+        const user = await userService.getUserById(id);
+        if (user) {
+            res.status(200).json(user);
+        } else {
+            res.status(404).json({error: 'User not found'});
+        }
+    } catch (err) {
+        return res.status(400).send(ErrorResponse(err))
+    }
+}
 module.exports = {
     listUser,
     addUser,
-    deleteUser
+    deleteUser,
+    getUserById
 }

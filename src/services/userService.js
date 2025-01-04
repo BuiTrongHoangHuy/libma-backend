@@ -181,7 +181,31 @@ const addUser = async (data) => {
         }
     }
 }
-
+const getUserById = async (id) => {
+    try {
+        const user = await db.User.findOne(
+            {
+                where: {user_id: id}
+            });
+        if (!user) {
+            return {
+                message: 'No user found',
+                code: 200,
+            }
+        }
+        return {
+            message: 'Get user detail successful',
+            code: 200,
+            data: user || {}
+        }
+    } catch (error) {
+        return {
+            message: error.message,
+            code: error.code,
+            error: error,
+        }
+    }
+}
 const deleteUser = async (email) => {
     try {
         let checkEmail = await db.User.findOne({where: {email: email}})
@@ -216,5 +240,6 @@ module.exports = {
     loginUser,
     listUser,
     addUser,
-    deleteUser
+    deleteUser,
+    getUserById
 }

@@ -2,6 +2,7 @@ import {ErrorResponse, SimpleResponse} from "../libs/response";
 import userService from "../services/userService";
 import categoryService from "../services/categoryService";
 import readerService from "../services/readerService";
+import titleService from "../services/titleService";
 
 const listCategory = async (req, res) => {
     try {
@@ -54,4 +55,22 @@ const getCategoryById = async (req, res) => {
         return res.status(400).send(ErrorResponse(err))
     }
 }
-module.exports = {listCategory, createCategory, deleteCategory,getCategoryById}
+const updateCategory = async (req, res) => {
+    try {
+        const id = req.params.id;
+        if (!id) {
+            return res.status(400).json({error: 'ID is required'});
+        }
+        const title = await categoryService.updateCategory(req.params.id, req.body);
+        if (title) {
+            res.status(200).json(title);
+        } else {
+            res.status(404).json({error: 'Category not found'});
+        }
+
+    } catch (err) {
+        return res.status(400).send(ErrorResponse(err))
+
+    }
+}
+module.exports = {listCategory, createCategory, deleteCategory,getCategoryById,updateCategory}

@@ -109,4 +109,29 @@ const getCategoryById = async (id) => {
         }
     }
 }
-module.exports = {listCategory, createCategory, deleteCategory,getCategoryById};
+const updateCategory = async (categoryId, categoryData) => {
+    try {
+        const category = await db.Category.findByPk(categoryId);
+        if (category) {
+            await db.Category.update({
+                category_name: categoryData.categoryName,
+                note: categoryData.note,
+                status: categoryData.status,
+            }, {
+                where: {category_id: categoryId}
+            })
+            return {
+                message: 'Successfully update category',
+                code: 200,
+            }
+        }
+    } catch (error) {
+        return {
+            message: error.message,
+            code: 500,
+            error: error,
+        }
+    }
+
+}
+module.exports = {listCategory, createCategory, deleteCategory,getCategoryById,updateCategory};

@@ -42,8 +42,9 @@ let v1Router = (app) => {
     //category
     router.get('/categories/list', categoryController.listCategory);
     router.post('/categories/add', categoryController.createCategory)
-    router.put('/categories/:id', categoryController.deleteCategory);
+    router.put('/categories/delete/:id', categoryController.deleteCategory);
     router.get('/categories/:id', categoryController.getCategoryById);
+    router.put('/categories/:id', categoryController.updateCategory);
 
 
     //title

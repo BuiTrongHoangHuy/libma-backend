@@ -237,6 +237,8 @@ const deleteUser = async (email) => {
 }
 
 const updateUser = async (userId, userData) => {
+    const transaction = await db.sequelize.transaction();
+
     try {
         const user = await db.User.findByPk(userId);
         if (user) {
@@ -248,13 +250,23 @@ const updateUser = async (userId, userData) => {
                 status: userData.status,
             }, {
                 where: {user_id: userId}
-            })
+            },{transaction})
+
+            await db.Account.update({
+                status: readerData.status,
+            },{
+                where: {account_id: reader.account_id}
+            },{transaction})
+            await transaction.commit()
+
             return {
                 message: 'Successfully update user',
                 code: 200,
             }
         }
     } catch (error) {
+        if(transaction) await transaction.rollback()
+
         return {
             message: error.message,
             code: 500,

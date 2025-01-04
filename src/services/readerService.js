@@ -5,6 +5,7 @@ const listReader = async () => {
     try {
         const readers = await db.Reader.findAll({
             attributes: ['reader_id',
+                ['account_id','accountId'],
                 ['full_name', 'fullName'],
                 ['phone_number', 'phoneNumber'],
                 'email',
@@ -134,4 +135,40 @@ const deleteReader = async (id) => {
         }
     }
 }
-module.exports = {listReader, createReader, getReaderById, deleteReader};
+const updateReader = async (readerId, readerData) => {
+    const transaction = await db.sequelize.transaction();
+    try {
+        const reader = await db.Reader.findByPk(readerId);
+        if (reader) {
+            await db.Reader.update({
+                full_name: readerData.fullName,
+                phone_number: readerData.phoneNumber,
+                type: readerData.type,
+                address: readerData.address,
+                status: readerData.status,
+            }, {
+                where: {reader_id: readerId}
+            },{transaction})
+            await db.Account.update({
+                status: readerData.status,
+            },{
+                where: {account_id: reader.account_id}
+            },{transaction})
+            await transaction.commit()
+            return {
+                message: 'Successfully update reader',
+                code: 200,
+            }
+        }
+    } catch (error) {
+
+        if(transaction) await transaction.rollback()
+        return {
+            message: error.message,
+            code: 500,
+            error: error,
+        }
+    }
+
+}
+module.exports = {listReader, createReader, getReaderById, deleteReader,updateReader};

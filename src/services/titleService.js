@@ -20,7 +20,7 @@ const listTitle = async () => {
         console.log(titles.every(user => user instanceof db.Title)); // true
 
         return {
-            message: 'Get list user successful',
+            message: 'Get list titles successful',
             code: 200,
             data: titles || {}
         }

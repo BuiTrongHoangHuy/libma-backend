@@ -17,9 +17,8 @@ const checkEmailExist = async (email) => {
 const registerUser = async (rawUserData) => {
     const transaction = await db.sequelize.transaction();
     try {
-        let isEmailExist = await checkEmailExist(rawUserData.email);
-        console.log(isEmailExist)
-        if (isEmailExist) {
+        let user = await db.Account.findOne({where: {email: email}})
+        if (user) {
             return {
                 message: 'Email already exists',
                 code: 400,
@@ -38,6 +37,8 @@ const registerUser = async (rawUserData) => {
             full_name: rawUserData.full_name,
             email: rawUserData.email,
             role: "Admin",
+            phone_number: rawUserData.phoneNumber,
+            address: rawUserData.address,
         }, {transaction});
 
         await transaction.commit()
@@ -46,8 +47,8 @@ const registerUser = async (rawUserData) => {
             code: 200,
         }
     } catch (e) {
-        await transaction.rollback()
         console.log(e)
+        await transaction.rollback()
         return {
             message: 'Something went wrong',
             code: 500,

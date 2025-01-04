@@ -10,7 +10,16 @@ const MYSQL_PORT = process.env.MYSQL_PORT || '3306';
 // Option 3: Passing parameters separately (other dialects)
 const sequelize = new Sequelize(MYSQL_DATABASE, MYSQL_USER, MYSQL_PASSWORD, {
     host: DB_ADDRESS,
-    dialect: DB_DIALECT
+    dialect: DB_DIALECT,
+    pool:{
+        max: 5,
+        min: 0,
+        acquire:30000,
+        idle: 100000,
+    },
+    dialectOptions:{
+        connectionTimeout: 10000,
+    }
 });
 
 //const sequelize = new Sequelize(DB_URL)

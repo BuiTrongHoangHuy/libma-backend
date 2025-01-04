@@ -29,6 +29,7 @@ let v1Router = (app) => {
     router.post('/users/add', userController.addUser)
     router.put('/users/delete', userController.deleteUser)
     router.get('/users/:id', userController.getUserById);
+    router.put('/users/:id', userController.updateUser);
 
     //reader
     router.get('/readers/list', readerController.listReader)

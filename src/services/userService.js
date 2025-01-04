@@ -235,11 +235,39 @@ const deleteUser = async (email) => {
         }
     }
 }
+
+const updateUser = async (userId, userData) => {
+    try {
+        const user = await db.User.findByPk(userId);
+        if (user) {
+            await db.User.update({
+                full_name: userData.fullName,
+                phone_number: userData.phoneNumber,
+                role: userData.role,
+                address: userData.address,
+                status: userData.status,
+            }, {
+                where: {user_id: userId}
+            })
+            return {
+                message: 'Successfully update user',
+                code: 200,
+            }
+        }
+    } catch (error) {
+        return {
+            message: error.message,
+            code: 500,
+            error: error,
+        }
+    }
+
+}
 module.exports = {
     registerUser,
     loginUser,
     listUser,
     addUser,
     deleteUser,
-    getUserById
+    getUserById,updateUser
 }

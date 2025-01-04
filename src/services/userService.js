@@ -48,7 +48,7 @@ const registerUser = async (rawUserData) => {
         }
     } catch (e) {
         console.log(e)
-        await transaction.rollback()
+        if (transaction) await transaction.rollback();
         return {
             message: 'Something went wrong',
             code: 500,

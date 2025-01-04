@@ -17,8 +17,8 @@ const sequelize = new Sequelize(MYSQL_DATABASE, MYSQL_USER, MYSQL_PASSWORD, {
         acquire:30000,
         idle: 100000,
     },
-    dialectOptions:{
-        connectionTimeout: 10000,
+    dialectOptions: {
+        connectTimeout: 10000,
     }
 });
 

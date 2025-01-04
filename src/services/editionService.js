@@ -41,7 +41,13 @@ const listEdition = async () => {
 
 const createEdition = async (editionData) => {
     try {
-        let checkEdition = await db.Edition.findOne({where: {isbn: editionData.isbn}})
+        let checkEdition = await db.Edition.findOne(
+            {where:
+                    {
+                        title_id: editionData.titleId,
+                        edition_number: editionData.editionNumber
+                    }
+            })
         if (checkEdition) {
             return {
                 message: 'Edition already exists',

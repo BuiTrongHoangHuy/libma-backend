@@ -185,6 +185,12 @@ const getUserById = async (id) => {
     try {
         const user = await db.User.findOne(
             {
+                include:[{
+                    model: db.Account,
+                    attributes: [
+                        'password'
+                    ],
+                }],
                 where: {user_id: id}
             });
         if (!user) {

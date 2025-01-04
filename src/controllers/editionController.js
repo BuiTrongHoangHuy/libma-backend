@@ -19,7 +19,8 @@ const listEdition = async (req, res) => {
 }
 const createEdition = async (req, res) => {
     try {
-        if (!req.body.titleId || !req.body.isbn) {
+        console.log(req.body)
+        if (!req.body.titleId) {
             return res.status(400).json({
                 message: 'Missing required fields'
             })

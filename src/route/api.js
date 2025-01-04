@@ -43,6 +43,7 @@ let v1Router = (app) => {
     router.get('/categories/list', categoryController.listCategory);
     router.post('/categories/add', categoryController.createCategory)
     router.put('/categories/:id', categoryController.deleteCategory);
+    router.get('/categories/:id', categoryController.getCategoryById);
 
 
     //title

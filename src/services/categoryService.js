@@ -83,4 +83,30 @@ const deleteCategory = async (categoryId) => {
         }
     }
 }
-module.exports = {listCategory, createCategory, deleteCategory};
+
+const getCategoryById = async (id) => {
+    try {
+        const category = await db.Category.findOne(
+            {
+                where: {category_id: id}
+            });
+        if (!category) {
+            return {
+                message: 'No category found',
+                code: 200,
+            }
+        }
+        return {
+            message: 'Get category detail successful',
+            code: 200,
+            data: category || {}
+        }
+    } catch (error) {
+        return {
+            message: error.message,
+            code: error.code,
+            error: error,
+        }
+    }
+}
+module.exports = {listCategory, createCategory, deleteCategory,getCategoryById};

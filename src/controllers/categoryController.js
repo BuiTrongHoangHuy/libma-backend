@@ -38,4 +38,20 @@ const deleteCategory = async (req, res) => {
         return res.status(400).send(ErrorResponse(err))
     }
 }
-module.exports = {listCategory, createCategory, deleteCategory}
+const getCategoryById = async (req, res) => {
+    try {
+        const id = req.params.id;
+        if (!id) {
+            return res.status(400).json({error: 'ID is required'});
+        }
+        const user = await categoryService.getCategoryById(id);
+        if (user) {
+            res.status(200).json(user);
+        } else {
+            res.status(404).json({error: 'Category not found'});
+        }
+    } catch (err) {
+        return res.status(400).send(ErrorResponse(err))
+    }
+}
+module.exports = {listCategory, createCategory, deleteCategory,getCategoryById}

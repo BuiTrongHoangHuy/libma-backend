@@ -81,6 +81,7 @@ let v1Router = (app) => {
 
     //violation
     router.get('/violations/list', violationController.listViolation);
+    router.post('/violations/add', violationController.createViolation);
 
     return app.use("/api/v1", router);
 }

@@ -63,12 +63,12 @@ module.exports = {
         });
 
         await queryInterface.addConstraint('Violations', {
-            fields: ['transaction_id'],
+            fields: ['reader_id'],
             type: 'foreign key',
-            name: 'fk_violations_transaction', // optional
+            name: 'fk_violations_reader', // optional
             references: {
-                table: 'LoanRecords',
-                field: 'transaction_id',
+                table: 'Readers',
+                field: 'reader_id',
             },
             onDelete: 'cascade',
             onUpdate: 'cascade',
@@ -118,7 +118,7 @@ module.exports = {
         await queryInterface.removeConstraint('BookCopies', 'fk_book_copies_edition');
         await queryInterface.removeConstraint('LoanRecords', 'fk_loan_records_reader');
         await queryInterface.removeConstraint('LoanRecords', 'fk_loan_records_copy');
-        await queryInterface.removeConstraint('Violations', 'fk_violations_transaction');
+        await queryInterface.removeConstraint('Violations', 'fk_violations_reader');
         await queryInterface.removeConstraint('Readers', 'fk_readers_account');
         await queryInterface.removeConstraint('Notifications', 'fk_notifications_reader');
         await queryInterface.removeConstraint('Users', 'fk_users_account');

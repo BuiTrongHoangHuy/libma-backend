@@ -19,5 +19,22 @@ const listViolation = async (req, res) => {
         return res.status(400).send(ErrorResponse(err))
     }
 }
+const createViolation = async (req, res) => {
+    try {
 
-module.exports = {listViolation}
+        if ( !req.body.readerId || !req.body.violationType) {
+            return res.status(400).json({
+                message: "Missing fields",
+            });
+        }
+
+        const createdViolation = await violationService.createViolation(req.body);
+        if(createdViolation.code !==200){
+            res.status(500).send(createdViolation);
+        }
+        res.status(201).json(createdViolation);
+    } catch (err) {
+        res.status(500).send(ErrorResponse(err));
+    }
+};
+module.exports = {listViolation,createViolation}

@@ -10,8 +10,8 @@ module.exports = {
                 allowNull: false,
                 autoIncrement: true,
             },
-            transaction_id: {
-                type: DataTypes.STRING,
+            reader_id: {
+                type: DataTypes.BIGINT,
                 allowNull: false,
             },
             violation_type: {

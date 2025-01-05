@@ -4,8 +4,8 @@ module.exports = (sequelize) => {
     class Violation extends Model {
         static associate(models) {
             // A violation belongs to a loan record
-            Violation.belongsTo(models.LoanRecord, {
-                foreignKey: 'transaction_id',
+            Violation.belongsTo(models.Reader, {
+                foreignKey: 'reader_id',
             });
         }
     }
@@ -17,8 +17,8 @@ module.exports = (sequelize) => {
             allowNull: false,
             autoIncrement: true,
         },
-        transaction_id: {
-            type: DataTypes.STRING,
+        reader_id: {
+            type: DataTypes.BIGINT,
             allowNull: false,
         },
         violation_type: {

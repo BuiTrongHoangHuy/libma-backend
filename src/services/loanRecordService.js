@@ -87,6 +87,7 @@ const listLoanRecord = async () => {
                 loanDate,
                 dueDate,
                 returnDate,
+                status
             });
             return acc;
         }, []);
@@ -105,27 +106,29 @@ const listLoanRecord = async () => {
     }
 }
 
-const createLoanRecord = async (dataArray) => {
+const createLoanRecord = async (data) => {
     try {
-        if (!dataArray || dataArray.length === 0) {
+        if (!data || !data.readerId || !data.loanDate || !Array.isArray(data.loanBooks) || data.loanBooks.length === 0) {
             return {
-                message: "Failed to add loan records",
-                code: 500,
+                message: "Invalid input data",
+                code: 400,
             };
         }
-        const transactionId = uuidv4();
 
-        const Records = await Promise.all(
-            dataArray.map((data) => {
+        const uuid = uuidv4();
+        const transactionId = uuid.replace(/\D/g, '').substring(0, 10);
+
+        const records = await Promise.all(
+            data.loanBooks.map((book) => {
                 return db.LoanRecord.create({
                     transaction_id: transactionId,
                     reader_id: data.readerId,
-                    copy_id: data.copyId,
+                    copy_id: book.copyId,
                     loan_date: data.loanDate,
-                    due_date: data.dueDate,
-                    return_date: data.returnDate,
-                    fine: data.fine,
-                    status: data.status,
+                    due_date: book.dueDate,
+                    return_date: book.returnDate || null,
+                    fine: book.fine || null,
+                    status: book.status || 1,
                 });
             })
         );
@@ -134,10 +137,10 @@ const createLoanRecord = async (dataArray) => {
             message: "Successfully added loan records",
             code: 200,
             transactionId: transactionId,
-            data: Records,
+            data: records.map((record) => record.get({ plain: true })),
         };
     } catch (error) {
-        console.log(error)
+        console.error(error);
         return {
             message: "Failed to add loan records",
             code: error.code || 500,
@@ -145,7 +148,6 @@ const createLoanRecord = async (dataArray) => {
         };
     }
 };
-
 
 const getLoanRecordById = async (id) => {
     try {
@@ -232,6 +234,7 @@ const getLoanRecordById = async (id) => {
                 loanDate,
                 dueDate,
                 returnDate,
+                status
             });
             return acc;
         }, [])[0];

@@ -61,6 +61,7 @@ let v1Router = (app) => {
     router.get('/editions/:id', editionController.getEditionById);
     router.put('/editions/delete/:id', editionController.deleteEdition);
     router.put('/editions/:id', editionController.updateEdition);
+    router.post('/editions/add-fast', editionController.addBookFast);
 
     //book copy
     router.get('/bookCopies/list', bookCopyController.listBook);

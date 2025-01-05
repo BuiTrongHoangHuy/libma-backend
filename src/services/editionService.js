@@ -1,5 +1,6 @@
 import db from '../models/index'
 import bcrypt from "bcryptjs";
+import {title} from "process";
 
 const listEdition = async () => {
     try {
@@ -183,4 +184,64 @@ const updateEdition = async (editionId, editionData) => {
     }
 
 }
-module.exports = {listEdition, createEdition, getEditionById, deleteEdition, updateEdition};
+
+const addBookFast = async (data)=>{
+    const transaction = await db.sequelize.transaction();
+
+    try{
+        let checkEdition = await db.Edition.findOne(
+            {where:
+                    {
+                        isbn: data.isbn,
+                    }
+            })
+        if (checkEdition) {
+            return {
+                message: 'Edition already exists',
+                code: 400,
+            }
+        }
+
+        let checkTitle = await db.Title.findOne({where: {title_name: data.title}})
+        if (checkTitle) {
+            return {
+                message: 'Title already exists',
+                code: 400,
+            }
+        }
+
+        const titleResponse = await db.Title.create({
+            title_name: data.title,
+            author: data.author,
+            category_id: data.categoryId,
+            summary: data.summary,
+            status: data.status,
+        },{transaction})
+
+        const editionResponse = await db.Edition.create({
+            title_id: titleResponse.title_id,
+            edition_number: data.editionNumber || 1,
+            publication_year: data.publishedDate,
+            publisher: data.publisher,
+            pages: data.pages,
+            thumbnail_url: data.imageUrl,
+            isbn: data.isbn,
+        },{transaction})
+        await transaction.commit()
+        return {
+            message: 'Successfully add edition',
+            code: 200,
+            data: editionResponse
+        }
+    }catch (error){
+        await transaction.rollback()
+        console.log(error)
+        return {
+            message: error.message,
+            code: 500,
+            error: error,
+        }
+    }
+
+}
+module.exports = {listEdition, createEdition, getEditionById, deleteEdition, updateEdition,addBookFast};

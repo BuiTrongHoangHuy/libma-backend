@@ -26,7 +26,10 @@ const createEdition = async (req, res) => {
             })
         }
         const edition = await editionService.createEdition(req.body);
-        res.status(201).json(edition);
+        if(edition.code !==200){
+            return res.status(400).json(edition);
+        }
+        res.status(200).json(edition);
     } catch (err) {
         res.status(500).send(ErrorResponse(err));
     }
@@ -74,4 +77,21 @@ const updateEdition = async (req, res) => {
 
     }
 }
-module.exports = {listEdition, createEdition, getEditionById, deleteEdition, updateEdition}
+const addBookFast = async (req,res) =>{
+    try{
+        if (!req.body.title|| !req.body.isbn || !req.body.author) {
+            return res.status(400).json({
+                message: 'Missing required fields'
+            })
+        }
+        const edition = await editionService.addBookFast(req.body);
+        if(edition.code !==200){
+            return res.status(400).json(edition);
+        }
+        res.status(200).json(edition);
+    } catch (err) {
+        res.status(500).send(ErrorResponse(err));
+    }
+
+}
+module.exports = {listEdition, createEdition, getEditionById, deleteEdition, updateEdition,addBookFast}

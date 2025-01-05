@@ -84,7 +84,7 @@ const getEditionById = async (id) => {
         const edition = await db.Edition.findOne(
             {
                 include: [{
-                    model: db.Title, attributes: [['title_name', 'titleName'], ['title_id', 'titleId'], 'author'],
+                    model: db.Title, attributes: [['title_name', 'titleName'], ['title_id', 'titleId'], 'author', 'summary'],
                     include: [{
                         model: db.Category,
                         attributes: [['category_id', 'categoryId'], ['category_name', 'categoryName']]

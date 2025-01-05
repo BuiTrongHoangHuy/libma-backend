@@ -36,6 +36,9 @@ module.exports = (sequelize) => {
             type: DataTypes.ENUM('Admin', 'Staff', 'Librarian'),
             allowNull: false
         },
+        address: {
+            type: DataTypes.STRING,
+        },
         status: {
             type: DataTypes.INTEGER
         },

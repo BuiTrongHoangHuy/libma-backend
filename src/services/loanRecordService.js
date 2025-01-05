@@ -45,30 +45,59 @@ const listLoanRecord = async () => {
     }
 }
 
-const createLoanRecord = async (data) => {
+const createLoanRecord = async (dataArray) => {
     try {
-        const recordResponse = await db.LoanRecord.create({
-            reader_id: data.readerId,
-            copy_id: data.copyId,
-            loan_date: data.loanDate,
-            due_date: data.dueDate,
-            return_date: data.returnDate,
-            fine: data.fine,
-            status: data.status,
-        })
-        return {
-            message: 'Successfully add loan record',
-            code: 200,
-            data: recordResponse
+        if (!dataArray || dataArray.length === 0) {
+            return {
+                message: "Failed to add loan records",
+                code: 500,
+            };
         }
+
+        const firstRecord = await db.LoanRecord.create({
+            reader_id: dataArray[0].readerId,
+            copy_id: dataArray[0].copyId,
+            loan_date: dataArray[0].loanDate,
+            due_date: dataArray[0].dueDate,
+            return_date: dataArray[0].returnDate,
+            fine: dataArray[0].fine,
+            status: dataArray[0].status,
+        });
+
+        const transactionId = firstRecord.transaction_id;
+
+        const otherRecords = await Promise.all(
+            dataArray.slice(1).map((data) => {
+                return db.LoanRecord.create({
+                    transaction_id: transactionId,
+                    reader_id: data.readerId,
+                    copy_id: data.copyId,
+                    loan_date: data.loanDate,
+                    due_date: data.dueDate,
+                    return_date: data.returnDate,
+                    fine: data.fine,
+                    status: data.status,
+                });
+            })
+        );
+
+        const allRecords = [firstRecord, ...otherRecords];
+
+        return {
+            message: "Successfully added loan records",
+            code: 200,
+            transactionId: transactionId,
+            data: allRecords,
+        };
     } catch (error) {
         return {
-            message: error.message,
-            code: error.code,
-            error: error,
-        }
+            message: "Failed to add loan records",
+            code: error.code || 500,
+            error: error.message,
+        };
     }
 };
+
 
 const getLoanRecordById = async (id) => {
     try {

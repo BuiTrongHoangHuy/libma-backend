@@ -247,7 +247,15 @@ const updateUser = async (userId, userData) => {
 
     try {
         const user = await db.User.findByPk(userId);
+        const account = await db.Account.findByPk(user.account_id)
+        console.log("account",account)
+
         if (user) {
+            let hashedPassword = null;
+            if (userData.password)
+                hashedPassword = await bcrypt.hash(userData.password,account.salt)
+
+
             await db.User.update({
                 full_name: userData.fullName,
                 phone_number: userData.phoneNumber,
@@ -259,9 +267,10 @@ const updateUser = async (userId, userData) => {
             },{transaction})
 
             await db.Account.update({
-                status: readerData.status,
+                password: hashedPassword || account.password,
+                status: userData.status,
             },{
-                where: {account_id: reader.account_id}
+                where: {account_id: user.account_id}
             },{transaction})
             await transaction.commit()
 

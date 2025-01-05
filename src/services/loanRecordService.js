@@ -90,6 +90,7 @@ const createLoanRecord = async (dataArray) => {
             data: allRecords,
         };
     } catch (error) {
+        console.log(error)
         return {
             message: "Failed to add loan records",
             code: error.code || 500,

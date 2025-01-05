@@ -6,7 +6,6 @@ module.exports = {
         await queryInterface.createTable('LoanRecords', {
             transaction_id: {
                 type: Sequelize.BIGINT,
-                primaryKey: true,
                 allowNull: false,
                 autoIncrement: true,
             },
@@ -46,7 +45,16 @@ module.exports = {
                 allowNull: false,
             },
         });
+
+        await queryInterface.addConstraint('LoanRecords', {
+            fields: ['transaction_id', 'copy_id'],
+            type: 'primary key',
+            name: 'loanrecords_composite_pk',
+        });
     },
+
+
+
     async down(queryInterface, Sequelize) {
         await queryInterface.dropTable('LoanRecords');
     }

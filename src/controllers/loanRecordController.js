@@ -20,13 +20,23 @@ const listLoanRecord = async (req, res) => {
 }
 const createLoanRecord = async (req, res) => {
     try {
-        if (!req.body.readerId || !req.body.copyId || !req.body.loanDate || !req.body.dueDate) {
+        const records = req.body;
+
+        if (!Array.isArray(records) || records.length === 0) {
             return res.status(400).json({
-                message: 'Missing required fields'
-            })
+                message: "Request body must be a non-empty array of objects",
+            });
         }
-        const edition = await loanRecordService.createLoanRecord(req.body);
-        res.status(201).json(edition);
+
+        for (const record of records) {
+            if (!record.readerId || !record.copyId || !record.loanDate || !record.dueDate) {
+                return res.status(400).json({
+                    message: "Missing readerId, copyId, loanDate, and dueDate",
+                });
+            }
+        }
+        const createdRecords = await loanRecordService.createLoanRecord(records);
+        res.status(201).json(createdRecords);
     } catch (err) {
         res.status(500).send(ErrorResponse(err));
     }

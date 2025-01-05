@@ -5,9 +5,8 @@ module.exports = {
     async up(queryInterface, Sequelize) {
         await queryInterface.createTable('LoanRecords', {
             transaction_id: {
-                type: Sequelize.BIGINT,
+                type: Sequelize.STRING,
                 allowNull: false,
-                autoIncrement: true,
             },
             reader_id: {
                 type: Sequelize.BIGINT,
@@ -52,8 +51,6 @@ module.exports = {
             name: 'loanrecords_composite_pk',
         });
     },
-
-
 
     async down(queryInterface, Sequelize) {
         await queryInterface.dropTable('LoanRecords');

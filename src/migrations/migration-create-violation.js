@@ -11,7 +11,7 @@ module.exports = {
                 autoIncrement: true,
             },
             transaction_id: {
-                type: DataTypes.BIGINT,
+                type: DataTypes.STRING,
                 allowNull: false,
             },
             violation_type: {

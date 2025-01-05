@@ -1,6 +1,7 @@
 'use strict'
 import db from '../models/index'
 import bcrypt from "bcryptjs";
+const { v4: uuidv4 } = require('uuid'); // Import thư viện UUID
 
 const listLoanRecord = async () => {
     try {
@@ -53,21 +54,10 @@ const createLoanRecord = async (dataArray) => {
                 code: 500,
             };
         }
+        const transactionId = uuidv4();
 
-        const firstRecord = await db.LoanRecord.create({
-            reader_id: dataArray[0].readerId,
-            copy_id: dataArray[0].copyId,
-            loan_date: dataArray[0].loanDate,
-            due_date: dataArray[0].dueDate,
-            return_date: dataArray[0].returnDate,
-            fine: dataArray[0].fine,
-            status: dataArray[0].status,
-        });
-
-        const transactionId = firstRecord.transaction_id;
-
-        const otherRecords = await Promise.all(
-            dataArray.slice(1).map((data) => {
+        const Records = await Promise.all(
+            dataArray.map((data) => {
                 return db.LoanRecord.create({
                     transaction_id: transactionId,
                     reader_id: data.readerId,
@@ -81,13 +71,11 @@ const createLoanRecord = async (dataArray) => {
             })
         );
 
-        const allRecords = [firstRecord, ...otherRecords];
-
         return {
             message: "Successfully added loan records",
             code: 200,
             transactionId: transactionId,
-            data: allRecords,
+            data: Records,
         };
     } catch (error) {
         console.log(error)

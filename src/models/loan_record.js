@@ -21,12 +21,15 @@ module.exports = (sequelize) => {
     LoanRecord.init(
         {
             transaction_id: {
-                type: DataTypes.BIGINT,
+                type: DataTypes.STRING,
                 allowNull: false,
+                primaryKey: true,
+
             },
             copy_id: {
                 type: DataTypes.BIGINT,
                 allowNull: false,
+                primaryKey: true,
             },
             reader_id: {
                 type: DataTypes.BIGINT,
@@ -62,7 +65,6 @@ module.exports = (sequelize) => {
             sequelize,
             modelName: 'LoanRecord',
             tableName: 'LoanRecords',
-            timestamps: true,
             indexes: [
                 {
                     unique: true,

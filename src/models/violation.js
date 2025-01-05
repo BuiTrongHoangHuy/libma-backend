@@ -18,7 +18,7 @@ module.exports = (sequelize) => {
             autoIncrement: true,
         },
         transaction_id: {
-            type: DataTypes.BIGINT,
+            type: DataTypes.STRING,
             allowNull: false,
         },
         violation_type: {

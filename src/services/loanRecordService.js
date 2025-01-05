@@ -6,43 +6,102 @@ const { v4: uuidv4 } = require('uuid'); // Import thư viện UUID
 const listLoanRecord = async () => {
     try {
         const records = await db.LoanRecord.findAll({
-            include: [{
-                model: db.Reader,
-                attributes: [
-                    ['reader_id', 'readerId'],
-                    ['account_id', 'accountId'],
-                    ['phone_number', 'phoneNumber'],
-                    'email',
-                    ['full_name', 'fullName'],
-                    'address',
-                    'type',
-                    'status',
-                ],
-            }],
-            attributes: [['transaction_id', 'transactionId'],
+            include: [
+                {
+                    model: db.Reader,
+                    attributes: [
+                        ['reader_id', 'readerId'],
+                        ['account_id', 'accountId'],
+                        ['phone_number', 'phoneNumber'],
+                        'email',
+                        ['full_name', 'fullName'],
+                        'address',
+                        'type',
+                        'status',
+                    ],
+                },
+                {
+                    model: db.BookCopy,
+                    attributes: [
+                        ['copy_id', 'copyId'],
+                        ['edition_id', 'editionId'],
+                    ],
+                },
+            ],
+            attributes: [
+                ['transaction_id', 'transactionId'],
                 ['reader_id', 'readerId'],
                 ['copy_id', 'copyId'],
                 ['loan_date', 'loanDate'],
                 ['due_date', 'dueDate'],
+                ['return_date', 'returnDate'],
                 'fine',
                 'status',
                 'createdAt',
-                'updatedAt'
-            ]
+                'updatedAt',
+            ],
         });
-        console.log(records.every(user => user instanceof db.LoanRecord)); // true
+
+        if (!records || records.length === 0) {
+            return {
+                message: 'No loan records found',
+                code: 404,
+            };
+        }
+
+        const result = records.reduce((acc, record) => {
+            const {
+                transactionId,
+                readerId,
+                loanDate,
+                dueDate,
+                returnDate,
+                fine,
+                status,
+                createdAt,
+                updatedAt,
+                Reader,
+                BookCopy,
+            } = record.get({ plain: true });
+
+            let existingRecord = acc.find((item) => item.transactionId === transactionId);
+
+            if (!existingRecord) {
+                existingRecord = {
+                    transactionId,
+                    readerId,
+                    loanDate,
+                    dueDate,
+                    fine,
+                    status,
+                    createdAt,
+                    updatedAt,
+                    Reader,
+                    BookCopy: [],
+                };
+                acc.push(existingRecord);
+            }
+
+            existingRecord.BookCopy.push({
+                ...BookCopy,
+                loanDate,
+                dueDate,
+                returnDate,
+            });
+            return acc;
+        }, []);
 
         return {
             message: 'Get list loan records successful',
             code: 200,
-            data: records || {}
-        }
+            data: result,
+        };
     } catch (error) {
         return {
             message: error.message,
             code: error.code,
             error: error,
-        }
+        };
     }
 }
 
@@ -90,9 +149,9 @@ const createLoanRecord = async (dataArray) => {
 
 const getLoanRecordById = async (id) => {
     try {
-        const record = await db.LoanRecord.findOne(
-            {
-                include: [{
+        const records = await db.LoanRecord.findAll({
+            include: [
+                {
                     model: db.Reader,
                     attributes: [
                         ['reader_id', 'readerId'],
@@ -104,44 +163,90 @@ const getLoanRecordById = async (id) => {
                         'type',
                         'status',
                     ],
-                }, {
+                },
+                {
                     model: db.BookCopy,
                     attributes: [
                         ['copy_id', 'copyId'],
                         ['edition_id', 'editionId'],
-                    ]
-                }
-                ],
-                attributes: [['transaction_id', 'transactionId'],
-                    ['reader_id', 'readerId'],
-                    ['copy_id', 'copyId'],
-                    ['loan_date', 'loanDate'],
-                    ['due_date', 'dueDate'],
-                    'fine',
-                    'status',
-                    'createdAt',
-                    'updatedAt'
-                ],
-                where: {transaction_id: id}
-            });
-        if (!record) {
+                    ],
+                },
+            ],
+            attributes: [
+                ['transaction_id', 'transactionId'],
+                ['reader_id', 'readerId'],
+                ['copy_id', 'copyId'],
+                ['loan_date', 'loanDate'],
+                ['due_date', 'dueDate'],
+                ['return_date', 'returnDate'],
+                'fine',
+                'status',
+                'createdAt',
+                'updatedAt',
+            ],
+            where: { transaction_id: id },
+        });
+
+        if (!records || records.length === 0) {
             return {
                 message: 'No loan record found',
                 code: 404,
-            }
+            };
         }
+
+        const result = records.reduce((acc, record) => {
+            const {
+                transactionId,
+                readerId,
+                loanDate,
+                dueDate,
+                returnDate,
+                fine,
+                status,
+                createdAt,
+                updatedAt,
+                Reader,
+                BookCopy,
+            } = record.get({ plain: true });
+
+            let existingRecord = acc.find((item) => item.transactionId === transactionId);
+
+            if (!existingRecord) {
+                existingRecord = {
+                    transactionId,
+                    readerId,
+                    loanDate,
+                    dueDate,
+                    fine,
+                    status,
+                    createdAt,
+                    updatedAt,
+                    Reader,
+                    BookCopy: [],
+                };
+                acc.push(existingRecord);
+            }
+
+            existingRecord.BookCopy.push({
+                ...BookCopy,
+                loanDate,
+                dueDate,
+                returnDate,
+            });
+            return acc;
+        }, [])[0];
 
         return {
             message: 'Get loan record detail successful',
             code: 200,
-            data: record || {}
-        }
+            data: result,
+        };
     } catch (error) {
         return {
             message: error.message,
             code: error.code,
             error: error,
-        }
+        };
     }
 }
 

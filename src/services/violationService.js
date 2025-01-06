@@ -77,18 +77,10 @@ const createViolation = async (data) => {
 };
 const updateResolved = async (violationId) => {
     try {
-        const violation = await db.Violation.findByPk(violationId);
-
-        if (!violation) {
-            return {
-                message: 'Violation not found',
-                code: 404,
-            };
-        }
-
-        violation.resolved = true;
-        await violation.save();
-
+        await db.Violation.update(
+            { resolved: true },
+            { where: { violation_id: violationId } }
+        );
 
         return {
             message: 'Violation resolved successfully',

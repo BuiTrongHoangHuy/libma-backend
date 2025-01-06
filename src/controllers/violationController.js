@@ -37,4 +37,21 @@ const createViolation = async (req, res) => {
         res.status(500).send(ErrorResponse(err));
     }
 };
-module.exports = {listViolation,createViolation}
+const updateResolved = async (req,res) =>{
+    try {
+
+        const id = req.params.id;
+        if (!id) {
+            return res.status(400).json({error: 'ID is required'});
+        }
+
+        const createdViolation = await violationService.updateResolved(id);
+        if(createdViolation.code !==200){
+            res.status(500).send(createdViolation);
+        }
+        res.status(201).json(createdViolation);
+    } catch (err) {
+        res.status(500).send(ErrorResponse(err));
+    }
+}
+module.exports = {listViolation,createViolation,updateResolved}

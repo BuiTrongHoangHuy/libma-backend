@@ -405,7 +405,7 @@ const loanRecordsByMonth = async () => {
     }
 };
 
-const returnBooks = async (transactionId, newStatus = 2) => {
+const returnBooks = async (transactionId, newStatus = "Available") => {
     try {
         const loanRecords = await db.LoanRecord.findAll({
             where: { transaction_id: transactionId },

@@ -8,6 +8,7 @@ import cookieParser from 'cookie-parser';
 
 require('dotenv').config();
 import connectDB from "./config/connectDB";
+import {sendEmail} from "./sesClient";
 
 let app = express();
 

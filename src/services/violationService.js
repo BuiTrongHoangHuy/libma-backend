@@ -2,6 +2,7 @@
 import db from '../models/index'
 import bcrypt from "bcryptjs";
 import {v4 as uuidv4} from "uuid";
+import {sendEmail} from "../sesClient";
 
 const listViolation = async () => {
     try {
@@ -59,6 +60,7 @@ const createViolation = async (data) => {
             resolved: data.resolved || false,
         });
 
+        await sendEmail({reader:reader,data:violation})
         return {
             message: 'Violation created successfully',
             code:200,
@@ -73,5 +75,34 @@ const createViolation = async (data) => {
         }
     }
 };
+const updateResolved = async (violationId) => {
+    try {
+        const violation = await db.Violation.findByPk(violationId);
 
-module.exports = {listViolation,createViolation};
+        if (!violation) {
+            return {
+                message: 'Violation not found',
+                code: 404,
+            };
+        }
+
+        violation.resolved = true;
+        await violation.save();
+
+
+        return {
+            message: 'Violation resolved successfully',
+            code: 200,
+            data: violation,
+        };
+    } catch (error) {
+        console.error('Error updating violation resolved status:', error);
+        return {
+            message: error.message,
+            code: error.code || 500,
+            error: error,
+        };
+    }
+};
+
+module.exports = {listViolation,createViolation, updateResolved};

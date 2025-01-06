@@ -71,7 +71,7 @@ let v1Router = (app) => {
     router.get('/bookCopies/:id', bookCopyController.getBookById);
     router.put('/bookCopies/delete/:id', bookCopyController.deleteBook);
     router.put('/bookCopies/:id', bookCopyController.updateBook);
-    router.get('/bookCopies/listAvailable', bookCopyController.listBookAvailable);
+    router.get('/bookCopies/list/available', bookCopyController.listBookAvailable);
 
     //loan record
     router.get('/loanRecords/list', loanRecordController.listLoanRecord);

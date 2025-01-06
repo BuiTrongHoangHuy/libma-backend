@@ -229,6 +229,7 @@ const listBookCopyAvailable = async () => {
             data: books || {}
         }
     } catch (error) {
+        console.log(error)
         return {
             message: error.message,
             code: error.code,

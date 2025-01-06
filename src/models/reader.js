@@ -48,6 +48,9 @@ module.exports = (sequelize) => {
         status: {
             type: DataTypes.INTEGER
         },
+        expiredAt: {
+            type: DataTypes.DATE,
+        },
         createdAt: {
             type: DataTypes.DATE,
             allowNull: false,

@@ -87,4 +87,29 @@ const updateLoanRecord = async (req, res) => {
 
     }
 }
-module.exports = {listLoanRecord, createLoanRecord, getLoanRecordById, deleteLoanRecord, updateLoanRecord}
+
+const loanReport = async (req, res) => {
+    try {
+        let response = await loanRecordService.loanReport()
+        return res.status(200).json({
+            message: response.message,
+            code: response.code,
+            data: response.data,
+        })
+    } catch (err) {
+        return res.status(400).send(ErrorResponse(err))
+    }
+}
+const loanReportByMonth = async (req, res) => {
+    try {
+        let response = await loanRecordService.loanRecordsByMonth()
+        return res.status(200).json({
+            message: response.message,
+            code: response.code,
+            data: response.data,
+        })
+    } catch (err) {
+        return res.status(400).send(ErrorResponse(err))
+    }
+}
+module.exports = {listLoanRecord, createLoanRecord, getLoanRecordById, deleteLoanRecord, updateLoanRecord,loanReport,loanReportByMonth}

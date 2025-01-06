@@ -73,4 +73,17 @@ const updateCategory = async (req, res) => {
 
     }
 }
-module.exports = {listCategory, createCategory, deleteCategory,getCategoryById,updateCategory}
+
+const countBooksByCategory = async (req, res) => {
+    try {
+        let response = await categoryService.countBooksByCategory()
+        return res.status(200).json({
+            message: response.message,
+            code: response.code,
+            data: response.data,
+        })
+    } catch (err) {
+        return res.status(400).send(ErrorResponse(err))
+    }
+}
+module.exports = {listCategory, createCategory, deleteCategory,getCategoryById,updateCategory,countBooksByCategory}

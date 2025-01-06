@@ -13,7 +13,8 @@ const listReader = async () => {
                 'type',
                 'status',
                 'createdAt',
-                'updatedAt'
+                'updatedAt',
+                'expiredAt'
             ]
         });
         console.log(readers.every(user => user instanceof db.Reader)); // true
@@ -60,6 +61,7 @@ const createReader = async (readerData) => {
             type: readerData.type || "Guest",
             address: readerData.address,
             phone_number: readerData.phoneNumber,
+            expiredAt: readerData.expiredAt,
         }, {transaction})
 
         await transaction.commit()

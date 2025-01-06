@@ -8,6 +8,7 @@ import editionController from "../controllers/editionController";
 import bookCopyController from "../controllers/bookCopyController";
 import loanRecordController from "../controllers/loanRecordController";
 import violationController from "../controllers/violationController";
+import {checkUserJWT} from "../middleware/JWTActions";
 
 let router = express.Router();
 
@@ -45,6 +46,7 @@ let v1Router = (app) => {
     router.put('/categories/delete/:id', categoryController.deleteCategory);
     router.get('/categories/:id', categoryController.getCategoryById);
     router.put('/categories/:id', categoryController.updateCategory);
+    router.get('/categories/books/count', categoryController.countBooksByCategory);
 
 
     //title
@@ -77,6 +79,8 @@ let v1Router = (app) => {
     router.get('/loanRecords/:id', loanRecordController.getLoanRecordById);
     router.put('/loanRecords/delete/:id', loanRecordController.deleteLoanRecord);
     router.put('/loanRecords/:id', loanRecordController.updateLoanRecord);
+    router.get('/loanRecords/loanReport/report' ,loanRecordController.loanReport);
+    router.get('/loanRecords/loanReport/reportByMonth' ,loanRecordController.loanReportByMonth);
 
 
     //violation

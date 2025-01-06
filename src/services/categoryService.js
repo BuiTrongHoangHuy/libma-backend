@@ -137,4 +137,66 @@ const updateCategory = async (categoryId, categoryData) => {
     }
 
 }
-module.exports = {listCategory, createCategory, deleteCategory,getCategoryById,updateCategory};
+const countBooksByCategory = async () => {
+    try {
+        const categories = await db.Category.findAll({
+            attributes: ['category_name'],
+            include: [
+                {
+                    model: db.Title,
+                    attributes: [],
+                    include: [
+                        {
+                            model: db.Edition,
+                            attributes: [],
+                            include: [
+                                {
+                                    model: db.BookCopy,
+                                    attributes: [
+                                        [db.Sequelize.fn('COUNT', db.Sequelize.col('copy_id')), 'totalBooks']
+                                    ],
+                                    /*where: {
+                                        book_status: 'Available',
+                                    },
+                                    required: true,*/
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ],
+            group: ['Category.category_name'],
+            raw: true,
+        });
+
+        // Kiểm tra nếu không có thể loại nào
+        if (!categories || categories.length === 0) {
+            return {
+                message: 'No categories found',
+                code: 404,
+            };
+        }
+
+        const result = categories.map(category => ({
+            category: category['category_name'],
+            totalBooks: category['Title.Edition.BookCopies.totalBooks'] || 0,
+        }));
+
+        return {
+            message: 'Get book count by category successful',
+            code: 200,
+            data: categories,
+        };
+    } catch (error) {
+        console.error(error);
+        return {
+            message: error.message,
+            code: 500,
+            error: error,
+        };
+    }
+};
+
+
+
+module.exports = {listCategory, createCategory, deleteCategory,getCategoryById,updateCategory,countBooksByCategory};

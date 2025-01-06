@@ -74,4 +74,16 @@ const updateBook = async (req, res) => {
 
     }
 }
-module.exports = {listBook, createBook, getBookById, deleteBook, updateBook}
+const listBookAvailable = async (req, res) => {
+    try {
+        let response = await bookCopyService.listBookCopyAvailable()
+        return res.status(200).json({
+            message: response.message,
+            code: response.code,
+            data: response.data,
+        })
+    } catch (err) {
+        return res.status(400).send(ErrorResponse(err))
+    }
+}
+module.exports = {listBook, createBook, getBookById, deleteBook, updateBook,listBookAvailable}

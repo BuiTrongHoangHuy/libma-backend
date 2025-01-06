@@ -10,7 +10,10 @@ const listCategory = async () => {
                 'status',
                 'createdAt',
                 'updatedAt'
-            ]
+            ],
+            where: {
+                status: 1
+            }
         });
         console.log(readers.every(user => user instanceof db.Category)); // true
 
@@ -88,7 +91,7 @@ const getCategoryById = async (id) => {
     try {
         const category = await db.Category.findOne(
             {
-                where: {category_id: id}
+                where: {category_id: id, status: 1}
             });
         if (!category) {
             return {

@@ -20,6 +20,7 @@ const handleRegister = async (req, res, next) => {
 }
 const handleLogin = async (req, res, next) => {
     try {
+        console.log(req.body)
         if (!req.body.email || !req.body.password) {
             return res.status(400).json({
                 message: 'Missing required fields'

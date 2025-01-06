@@ -21,7 +21,10 @@ const listViolation = async () => {
                 'status',
                 'createdAt',
                 'updatedAt'
-            ]
+            ],
+            where: {
+                status: 1
+            }
         });
         console.log(violations.every(user => user instanceof db.Violation)); // true
 

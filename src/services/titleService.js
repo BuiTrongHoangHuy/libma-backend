@@ -15,7 +15,10 @@ const listTitle = async () => {
                 'status',
                 'createdAt',
                 'updatedAt'
-            ]
+            ],
+            where: {
+                status: 1
+            }
         });
         console.log(titles.every(user => user instanceof db.Title)); // true
 
@@ -70,7 +73,7 @@ const getTitleById = async (id) => {
                 include: [{
                     model: db.Category, attributes: ['category_name'],
                 }],
-                where: {title_id: id}
+                where: {title_id: id, status:1}
             });
         if (!title) {
             return {

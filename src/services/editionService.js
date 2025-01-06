@@ -22,7 +22,10 @@ const listEdition = async () => {
                 'status',
                 'createdAt',
                 'updatedAt'
-            ]
+            ],
+            where: {
+                status: 1
+            }
         });
         console.log(editions.every(user => user instanceof db.Edition)); // true
 
@@ -101,7 +104,7 @@ const getEditionById = async (id) => {
                     'createdAt',
                     'updatedAt'
                 ],
-                where: {edition_id: id}
+                where: {edition_id: id, status: 1}
             });
         if (!edition) {
             return {
@@ -204,34 +207,45 @@ const addBookFast = async (data)=>{
 
         let checkTitle = await db.Title.findOne({where: {title_name: data.title}})
         if (checkTitle) {
+            const editionResponse = await db.Edition.create({
+                title_id: checkTitle.title_id,
+                edition_number: data.editionNumber || 1,
+                publication_year: data.publishedDate,
+                publisher: data.publisher,
+                pages: data.pages,
+                thumbnail_url: data.imageUrl,
+                isbn: data.isbn,
+            },{transaction})
+            await transaction.commit()
             return {
-                message: 'Title already exists',
-                code: 400,
+                message: 'Successfully add edition',
+                code: 200,
+                data: editionResponse
             }
-        }
+        }else{
+            const titleResponse = await db.Title.create({
+                title_name: data.title,
+                author: data.author,
+                category_id: data.categoryId,
+                summary: data.summary,
+                status: data.status,
+            },{transaction})
 
-        const titleResponse = await db.Title.create({
-            title_name: data.title,
-            author: data.author,
-            category_id: data.categoryId,
-            summary: data.summary,
-            status: data.status,
-        },{transaction})
-
-        const editionResponse = await db.Edition.create({
-            title_id: titleResponse.title_id,
-            edition_number: data.editionNumber || 1,
-            publication_year: data.publishedDate,
-            publisher: data.publisher,
-            pages: data.pages,
-            thumbnail_url: data.imageUrl,
-            isbn: data.isbn,
-        },{transaction})
-        await transaction.commit()
-        return {
-            message: 'Successfully add edition',
-            code: 200,
-            data: editionResponse
+            const editionResponse = await db.Edition.create({
+                title_id: titleResponse.title_id,
+                edition_number: data.editionNumber || 1,
+                publication_year: data.publishedDate,
+                publisher: data.publisher,
+                pages: data.pages,
+                thumbnail_url: data.imageUrl,
+                isbn: data.isbn,
+            },{transaction})
+            await transaction.commit()
+            return {
+                message: 'Successfully add edition',
+                code: 200,
+                data: editionResponse
+            }
         }
     }catch (error){
         await transaction.rollback()

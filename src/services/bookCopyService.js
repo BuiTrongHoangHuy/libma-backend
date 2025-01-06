@@ -30,7 +30,10 @@ const listBookCopy = async () => {
                 'status',
                 'createdAt',
                 'updatedAt'
-            ]
+            ],
+            where: {
+                status: 1
+            }
         });
         console.log(books.every(user => user instanceof db.BookCopy)); // true
 
@@ -102,7 +105,7 @@ const getBookCopyById = async (id) => {
                     'createdAt',
                     'updatedAt'
                 ],
-                where: {copy_id: id}
+                where: {copy_id: id, status: 1}
             });
         if (!bookCopy) {
             return {
@@ -182,4 +185,55 @@ const updateBookCopy = async (bookId, bookData) => {
     }
 
 }
-module.exports = {listBookCopy, createBookCopy, getBookCopyById, deleteBookCopy, updateBookCopy};
+
+const listBookCopyAvailable = async () => {
+    try {
+        const books = await db.BookCopy.findAll({
+            include: [{
+                model: db.Edition,
+                attributes: [
+                    ['edition_id', 'editionId'],
+                    ['edition_number', 'editionNumber'],
+                    ['publication_year', 'publicationYear'],
+                    'publisher',
+                    'pages',
+                    ['thumbnail_url', 'thumbnailUrl'],
+                    'isbn',
+                ],
+                include: [{
+                    model: db.Title, attributes: [['title_name', 'titleName'], ['title_id', 'titleId'], 'author'],
+                    include: [{
+                        model: db.Category,
+                        attributes: [['category_id', 'categoryId'], ['category_name', 'categoryName']]
+                    }],
+                }]
+            }],
+            attributes: [['copy_id', 'copyId'],
+                'condition',
+                'location',
+                ['book_status', 'bookStatus'],
+                'status',
+                'createdAt',
+                'updatedAt'
+            ],
+            where: {
+                status: 1,
+                book_status: "Available"
+            }
+        });
+        console.log(books.every(user => user instanceof db.BookCopy)); // true
+
+        return {
+            message: 'Get list book copies successful',
+            code: 200,
+            data: books || {}
+        }
+    } catch (error) {
+        return {
+            message: error.message,
+            code: error.code,
+            error: error,
+        }
+    }
+}
+module.exports = {listBookCopy, createBookCopy, getBookCopyById, deleteBookCopy, updateBookCopy,listBookCopyAvailable};

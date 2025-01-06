@@ -119,8 +119,9 @@ const createLoanRecord = async (data) => {
         const transactionId = uuid.replace(/\D/g, '').substring(0, 10);
 
         const records = await Promise.all(
-            data.loanBooks.map((book) => {
-                return db.LoanRecord.create({
+            data.loanBooks.map( async (book) => {
+
+                const loanRecord = await db.LoanRecord.create({
                     transaction_id: transactionId,
                     reader_id: data.readerId,
                     copy_id: book.copyId,
@@ -130,6 +131,13 @@ const createLoanRecord = async (data) => {
                     fine: book.fine || null,
                     status: book.status || 1,
                 });
+
+                await db.BookCopy.update(
+                    { bookStatus: "Borrowed" },
+                    { where: { copy_id: book.copyId } }
+
+                );
+                return loanRecord;
             })
         );
 

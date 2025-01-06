@@ -405,5 +405,53 @@ const loanRecordsByMonth = async () => {
     }
 };
 
+const returnBooks = async (transactionId, newStatus = 2) => {
+    try {
+        const loanRecords = await db.LoanRecord.findAll({
+            where: { transaction_id: transactionId },
+            include: [
+                {
+                    model: db.BookCopy,
+                    attributes: ['copy_id', 'book_status'],
+                }
+            ]
+        });
 
-module.exports = {listLoanRecord, createLoanRecord, getLoanRecordById, deleteLoanRecord, updateLoanRecord, loanReport,loanRecordsByMonth};
+        if (!loanRecords || loanRecords.length === 0) {
+            return {
+                message: 'No loan records found for this transaction',
+                code: 404,
+            };
+        }
+
+        const updateBookCopies = loanRecords.map(async (record) => {
+            const bookCopy = record.BookCopy;
+            if (bookCopy) {
+                await db.BookCopy.update(
+                    { book_status: newStatus },
+                    { where: { copy_id: bookCopy.copy_id } }
+                );
+            }
+        });
+
+        await Promise.all(updateBookCopies);
+
+        await db.LoanRecord.update(
+            { status: 2 },
+            { where: { transaction_id: transactionId } }
+        );
+
+        return {
+            message: 'Successfully updated book statuses for transaction',
+            code: 200,
+        };
+    } catch (error) {
+        console.error(error);
+        return {
+            message: error.message,
+            code: 500,
+            error: error,
+        };
+    }
+};
+module.exports = {listLoanRecord, createLoanRecord, getLoanRecordById, deleteLoanRecord, updateLoanRecord, loanReport,loanRecordsByMonth,returnBooks};

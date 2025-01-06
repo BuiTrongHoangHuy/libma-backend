@@ -112,4 +112,22 @@ const loanReportByMonth = async (req, res) => {
         return res.status(400).send(ErrorResponse(err))
     }
 }
-module.exports = {listLoanRecord, createLoanRecord, getLoanRecordById, deleteLoanRecord, updateLoanRecord,loanReport,loanReportByMonth}
+const returnBooks = async (req, res) => {
+    try {
+        const id = req.params.id;
+        if (!id) {
+            return res.status(400).json({error: 'ID is required'});
+        }
+        const record = await loanRecordService.returnBooks(req.params.id, req.body);
+        if (record) {
+            res.status(200).json(record);
+        } else {
+            res.status(404).json({error: 'Loan record not found'});
+        }
+
+    } catch (err) {
+        return res.status(400).send(ErrorResponse(err))
+
+    }
+}
+module.exports = {listLoanRecord, createLoanRecord, getLoanRecordById, deleteLoanRecord, updateLoanRecord,loanReport,loanReportByMonth,returnBooks}

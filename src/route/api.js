@@ -81,6 +81,7 @@ let v1Router = (app) => {
     router.put('/loanRecords/:id', loanRecordController.updateLoanRecord);
     router.get('/loanRecords/loanReport/report' ,loanRecordController.loanReport);
     router.get('/loanRecords/loanReport/reportByMonth' ,loanRecordController.loanReportByMonth);
+    router.put('/loanRecords/returnBooks/:id', loanRecordController.returnBooks);
 
 
     //violation
